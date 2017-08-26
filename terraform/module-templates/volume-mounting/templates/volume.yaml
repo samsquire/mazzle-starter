@@ -1,0 +1,17 @@
+write_files:
+- encoding: b64
+  content: ${service_content}
+  path: /etc/systemd/system/volume.service
+  permissions: '0644' 
+- encoding: b64
+  content: ${volume_mount_content}
+  path: /srv/volume_mount.sh
+  permissions: '0700' 
+- encoding: b64
+  content: ${volume_unmount_content}
+  path: /srv/volume_unmount.sh
+  permissions: '0700' 
+- encoding: b64
+  content: ${debmirror_content}
+  path: /srv/mirror.sh
+  permissions: '0700'

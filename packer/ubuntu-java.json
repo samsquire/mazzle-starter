@@ -1,0 +1,37 @@
+{
+  "variables": {
+    "component": "",
+    "build_number": "",
+    "subnet_id": "{{ env `public_subnet_id` }}",
+    "vpc_id": "{{ env `vpc_id` }}",
+    "source_ami": "{{ env `authenticated_ami_source_ami` }}"
+  },
+    "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "associate_public_ip_address": true,
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "profile": "default",
+      "ami_name": "{{ user `component` }}_{{ user `build_number` }}",
+      "vpc_id" : "{{ user `vpc_id` }}",
+      "subnet_id" : "{{ user `subnet_id` }}",
+      "tags": {
+        "Component": "{{ user `component` }}",
+        "Name": "{{ user `component` }}_{{ user `build_number`}}",
+        "SourceAmi": "{{ user `source_ami` }}"
+      },
+      "source_ami": "{{ user `source_ami` }}"
+    }
+    ],
+
+  "provisioners": [
+  {
+   "type": "chef-solo",
+   "cookbook_paths": ["../chef/applications", "../chef/applications/ubuntu_java/berks-cookbooks"],
+   "run_list": "recipe[ubuntu_java]" 
+  }
+]
+
+}

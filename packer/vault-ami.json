@@ -1,0 +1,62 @@
+{
+  "variables": {
+    "environment": "{{ env `environment` }}",
+    "component": "",
+    "build_number": "",
+    "subnet_id": "{{ env `public_subnet_id` }}",
+    "vpc_id": "{{ env `vpc_id` }}",
+    "source_ami": "{{ env `source_ami_source_ami` }}"
+  },
+    "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "associate_public_ip_address": true,
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "profile": "default",
+      "ami_name": "{{ user `component` }}_{{ user `build_number` }}",
+      "vpc_id" : "{{ user `vpc_id` }}",
+      "subnet_id" : "{{ user `subnet_id` }}",
+      "tags": {
+        "Component": "{{ user `component` }}",
+        "Name": "{{ user `component` }}_{{ user `build_number`}}",
+        "SourceAmi": "{{ user `source_ami` }}"
+      },
+      "source_ami": "{{ user `source_ami` }}"
+    }
+    ],
+
+  "provisioners": [
+  {
+   "type": "file",
+   "source": "scripts/create_root_ca.sh",
+   "destination": "/tmp/create_root_ca.sh"
+  },
+  {
+   "type": "file",
+   "source": "scripts/create_certificate.sh",
+   "destination": "/tmp/create_certificate.sh"
+  },
+  {
+   "type": "file",
+   "source": "scripts/vault.conf",
+   "destination": "/tmp/vault.conf"
+  },
+  {
+   "type": "file",
+   "source": "vault.sh",
+   "destination": "/tmp/vault.sh"
+  },
+  {
+   "type": "shell",
+   "inline": ["/tmp/vault.sh {{ user `environment` }}"]
+  },
+  {
+   "type": "shell",
+   "script": "ca.sh"
+  }
+
+]
+
+}

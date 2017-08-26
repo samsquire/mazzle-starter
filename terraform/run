@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo "Terraform run" >&2
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+set -a
+source ~/.aws/env
+set +a
+./t $ENV $COMPONENT apply >&2
+exit_code=$?
+./t $ENV $COMPONENT output | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r
+exit $exit_code
+

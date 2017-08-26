@@ -1,0 +1,11 @@
+---
+# file: simple-playbook.yml
+
+- hosts: all
+  become: True
+  roles:
+    - williamyeh.prometheus
+  vars:
+    prometheus_components: [ "prometheus", "alertmanager" ]
+    prometheus_alertmanager_url: "http://localhost:9093/"
+

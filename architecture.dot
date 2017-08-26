@@ -1,0 +1,70 @@
+digraph G {
+  label="pipeline";
+
+/* List your components */  
+"chef/ubuntu_java";
+"packer/source-ami";
+"packer/ubuntu-java";
+"terraform/vpc";
+"terraform/users";
+"terraform/bastion";
+ "terraform/private"; 
+/* "terraform/repository"; */
+/* "terraform/repository-volume"; */
+"packer/vault-ami";
+"terraform/vault";
+"terraform/security";
+"terraform/dns";
+"shell/root-certificates";
+"packer/authenticated-ami";
+
+/* List dependencies */
+"packer/source-ami" -> "terraform/bastion";
+
+/* "terraform/vpc" -> "terraform/repository"; */
+/* "terraform/dns" -> "terraform/repository"; */
+/* "terraform/security" -> "terraform/repository"; */
+/* "terraform/repository" -> "packer/source-ami"; */
+
+"terraform/vpc" -> "terraform/dns";
+ "terraform/vault" -> "terraform/private";
+/* "terraform/vpc" -> "terraform/repository-volume"; */
+/* "terraform/repository-volume" -> "terraform/repository"; */
+
+
+"terraform/vpc" -> "terraform/vault-volume";
+"terraform/vpc" -> "packer/source-ami";
+
+"terraform/vpc" -> "packer/vault-ami";
+"packer/vault-ami" -> "terraform/vault";
+
+"terraform/vault-volume" -> "terraform/vault";
+
+"packer/source-ami" -> "packer/vault-ami";
+
+ "terraform/dns" -> "terraform/private";
+
+"terraform/security" -> "terraform/vault"
+"terraform/vpc" -> "terraform/vault";
+
+"terraform/security" -> "terraform/bastion";
+ "terraform/security" -> "terraform/private"; 
+"terraform/vpc" -> "terraform/security";
+
+"chef/ubuntu_java" -> "packer/ubuntu-java";
+"terraform/users" -> "terraform/vpc"
+
+"terraform/vpc" ->"terraform/private";
+
+"terraform/vpc" -> "terraform/bastion";
+"terraform/vault" -> "shell/root-certificates";
+"terraform/bastion" -> "terraform/vault";
+
+"shell/root-certificates" -> "packer/authenticated-ami";
+
+"packer/ubuntu-java" -> "terraform/private";
+
+"packer/source-ami" -> "packer/authenticated-ami";
+"packer/authenticated-ami" -> "packer/ubuntu-java";
+
+}

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+./t laptop-backup bastion destroy -force
+./t laptop-backup security destroy -force
+./t laptop-backup private destroy -force
+./t laptop-backup repository destroy -force
+./t laptop-backup repository-volume destroy -force
+./t laptop-backup vault destroy -force
+./t laptop-backup vault-volume destroy -force
+./t laptop-backup dns destroy -force
+./t laptop-backup vpc destroy -force
+./t laptop-backup users destroy -force

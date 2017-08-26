@@ -1,0 +1,176 @@
+{
+  "_meta": {
+    "hostvars": {
+      "10.0.0.233": {
+        "ansible_host": "10.0.0.233", 
+        "ec2__in_monitoring_element": false, 
+        "ec2_account_id": "291569072141", 
+        "ec2_ami_launch_index": "0", 
+        "ec2_architecture": "x86_64", 
+        "ec2_block_devices": {
+          "sda1": "vol-057170695b0650596"
+        }, 
+        "ec2_client_token": "", 
+        "ec2_dns_name": "", 
+        "ec2_ebs_optimized": false, 
+        "ec2_eventsSet": "", 
+        "ec2_group_name": "", 
+        "ec2_hypervisor": "xen", 
+        "ec2_id": "i-06622efd5aca34711", 
+        "ec2_image_id": "ami-f50d1d91", 
+        "ec2_instance_profile": "", 
+        "ec2_instance_type": "t2.micro", 
+        "ec2_ip_address": "", 
+        "ec2_item": "", 
+        "ec2_kernel": "", 
+        "ec2_key_name": "vvv-macbook", 
+        "ec2_launch_time": "2017-08-25T14:02:53.000Z", 
+        "ec2_monitored": false, 
+        "ec2_monitoring": "", 
+        "ec2_monitoring_state": "disabled", 
+        "ec2_persistent": false, 
+        "ec2_placement": "eu-west-2a", 
+        "ec2_platform": "", 
+        "ec2_previous_state": "", 
+        "ec2_previous_state_code": 0, 
+        "ec2_private_dns_name": "ip-10-0-0-233.eu-west-2.compute.internal", 
+        "ec2_private_ip_address": "10.0.0.233", 
+        "ec2_public_dns_name": "", 
+        "ec2_ramdisk": "", 
+        "ec2_reason": "", 
+        "ec2_region": "eu-west-2", 
+        "ec2_requester_id": "", 
+        "ec2_root_device_name": "/dev/sda1", 
+        "ec2_root_device_type": "ebs", 
+        "ec2_security_group_ids": "sg-d1d3e3b8,sg-15d4e47c", 
+        "ec2_security_group_names": "needs_secrets,private", 
+        "ec2_sourceDestCheck": "true", 
+        "ec2_spot_instance_request_id": "", 
+        "ec2_state": "running", 
+        "ec2_state_code": 16, 
+        "ec2_state_reason": "", 
+        "ec2_subnet_id": "subnet-6b9c0110", 
+        "ec2_tag_Environment": "laptop-backup", 
+        "ec2_tag_Name": "private", 
+        "ec2_virtualization_type": "hvm", 
+        "ec2_vpc_id": "vpc-df1d7fb6"
+      }, 
+      "10.0.0.94": {
+        "ansible_host": "10.0.0.94", 
+        "ec2__in_monitoring_element": false, 
+        "ec2_account_id": "291569072141", 
+        "ec2_ami_launch_index": "0", 
+        "ec2_architecture": "x86_64", 
+        "ec2_block_devices": {
+          "sda1": "vol-077410553c433e000"
+        }, 
+        "ec2_client_token": "", 
+        "ec2_dns_name": "ec2-35-176-117-144.eu-west-2.compute.amazonaws.com", 
+        "ec2_ebs_optimized": false, 
+        "ec2_eventsSet": "", 
+        "ec2_group_name": "", 
+        "ec2_hypervisor": "xen", 
+        "ec2_id": "i-01de526c964276da1", 
+        "ec2_image_id": "ami-850c1ce1", 
+        "ec2_instance_profile": "", 
+        "ec2_instance_type": "t2.micro", 
+        "ec2_ip_address": "35.176.117.144", 
+        "ec2_item": "", 
+        "ec2_kernel": "", 
+        "ec2_key_name": "vvv-macbook", 
+        "ec2_launch_time": "2017-08-25T14:02:53.000Z", 
+        "ec2_monitored": false, 
+        "ec2_monitoring": "", 
+        "ec2_monitoring_state": "disabled", 
+        "ec2_persistent": false, 
+        "ec2_placement": "eu-west-2a", 
+        "ec2_platform": "", 
+        "ec2_previous_state": "", 
+        "ec2_previous_state_code": 0, 
+        "ec2_private_dns_name": "ip-10-0-0-94.eu-west-2.compute.internal", 
+        "ec2_private_ip_address": "10.0.0.94", 
+        "ec2_public_dns_name": "ec2-35-176-117-144.eu-west-2.compute.amazonaws.com", 
+        "ec2_ramdisk": "", 
+        "ec2_reason": "", 
+        "ec2_region": "eu-west-2", 
+        "ec2_requester_id": "", 
+        "ec2_root_device_name": "/dev/sda1", 
+        "ec2_root_device_type": "ebs", 
+        "ec2_security_group_ids": "sg-2ad2e243,sg-c5d2e2ac", 
+        "ec2_security_group_names": "bastion,internet_updates", 
+        "ec2_sourceDestCheck": "true", 
+        "ec2_spot_instance_request_id": "", 
+        "ec2_state": "running", 
+        "ec2_state_code": 16, 
+        "ec2_state_reason": "", 
+        "ec2_subnet_id": "subnet-659f021e", 
+        "ec2_tag_Environment": "laptop-backup", 
+        "ec2_tag_Name": "bastion", 
+        "ec2_virtualization_type": "hvm", 
+        "ec2_vpc_id": "vpc-df1d7fb6"
+      }
+    }
+  }, 
+  "ami_850c1ce1": [
+    "10.0.0.94"
+  ], 
+  "ami_f50d1d91": [
+    "10.0.0.233"
+  ], 
+  "ec2": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "eu-west-2": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "eu-west-2a": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "i-01de526c964276da1": [
+    "10.0.0.94"
+  ], 
+  "i-06622efd5aca34711": [
+    "10.0.0.233"
+  ], 
+  "key_vvv_macbook": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "platform_undefined": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "security_group_bastion": [
+    "10.0.0.94"
+  ], 
+  "security_group_internet_updates": [
+    "10.0.0.94"
+  ], 
+  "security_group_needs_secrets": [
+    "10.0.0.233"
+  ], 
+  "security_group_private": [
+    "10.0.0.233"
+  ], 
+  "tag_Environment_laptop_backup": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "tag_Name_bastion": [
+    "10.0.0.94"
+  ], 
+  "tag_Name_private": [
+    "10.0.0.233"
+  ], 
+  "type_t2_micro": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ], 
+  "vpc_id_vpc_df1d7fb6": [
+    "10.0.0.94", 
+    "10.0.0.233"
+  ]
+}

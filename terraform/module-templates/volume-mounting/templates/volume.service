@@ -1,0 +1,12 @@
+[Unit]
+Description=volumes
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/srv/volume_mount.sh
+ExecStop=/srv/volume_unmount.sh
+
+[Install]
+WantedBy=multi-user.target
+

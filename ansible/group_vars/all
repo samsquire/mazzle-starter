@@ -1,0 +1,2 @@
+ansible_ssh_common_args: '-o "StrictHostKeyChecking=no" -o ProxyCommand="ssh -i ~/.ssh/sam-macbook-aws -W %h:%p -q ubuntu@35.176.117.144"'
+

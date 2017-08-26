@@ -1,0 +1,75 @@
+---
+
+- hosts: all
+  become: yes
+  vars:
+    network_rail_username: sam@samsquire.com 
+    network_rail_password: ***REMOVED***
+    neo4j_password: newpassword 
+  tasks:
+  - apt_repository:
+      repo: ppa:webupd8team/java
+      state: present
+      update_cache: yes
+
+  - apt_key:
+      url: "https://debian.neo4j.org/neotechnology.gpg.key"
+      state: present
+
+  - apt_repository:
+      repo: "deb http://debian.neo4j.org/repo stable/"
+      state: present
+      update_cache: yes
+
+  - shell: apt-key update
+  - shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+  - shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+
+  - apt:
+      name: oracle-java8-installer
+      state: present
+
+  - apt:
+      name: neo4j=3.1.3
+      state: present
+      allow_unauthenticated: yes
+
+  - file:
+      path: /var/lib/trains
+      state: directory
+
+  - copy:
+      src: files/
+      dest: /var/lib/trains
+
+  - shell: "curl -L -u '{{ network_rail_username }}:{{ network_rail_password }}' 'https://datafeeds.networkrail.co.uk/ntrod/CifFileAuthenticate?type=CIF_ALL_FULL_DAILY&day=toc-full' -o /var/lib/trains/daily.gz"
+    args:
+      creates: /var/lib/trains/daily.gz
+
+  - shell: "gzip -d < /var/lib/trains/daily.gz > /var/lib/trains/daily.json"
+    args:
+      creates: /var/lib/trains/daily.json
+
+  - apt:
+      name: python3-pip
+      state: present
+
+  - pip:
+      name: neo4j-driver
+      executable: pip3
+
+  - shell: time python3 /var/lib/trains/filter.py < /var/lib/trains/daily.json > /var/lib/trains/schedule.json
+
+  - shell: "curl -H 'Content-Type: application/json' -X POST -d '{\"password\":\"{{neo4j_password}}\"}' -u neo4j:neo4j http://localhost:7474/user/neo4j/password"
+
+  - lineinfile:
+      path: /etc/neo4j/neo4j.conf
+      line: dbms.connectors.default_listen_address=0.0.0.0
+
+  - service:
+      name: neo4j
+      state: restarted
+
+#  - shell: "NEO4J_PASSWORD={{ neo4j_password }} python3 /var/lib/trains/insert.py < /var/lib/trains/schedule.json > /var/lib/trains/insert.log"
+
+

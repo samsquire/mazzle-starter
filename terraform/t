@@ -1,0 +1,69 @@
+#!/bin/bash
+
+ENV=$1
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+
+echo "Using $ENV" >&2
+
+shift
+COMPONENT=$1
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+
+
+shift
+TF_COMMAND="$1"
+if [ -z "$TF_COMMAND" ] ; then
+  echo "need to provide component terraform command"
+  exit 1
+fi
+shift
+
+ARGS=
+
+COMPONENT_PATH=components/$COMPONENT
+
+
+pushd $COMPONENT_PATH >&2
+rm -rf .state
+mkdir -p .state
+function init() {
+ terraform init -backend=true \
+   -backend-config=bucket=vvv-$ENV-state\
+   -backend-config=key=$COMPONENT/terraform.tfstate \
+   -backend-config=region=eu-west-2
+}
+ 
+case $TF_COMMAND in
+plan)
+  init
+  terraform $TF_COMMAND -var vvv_env=$ENV "$@"
+;;
+taint)
+  init
+  terraform $TF_COMMAND "$@"
+;;
+output)
+  terraform $TF_COMMAND -json "$@"
+;;
+destroy)
+  terraform $TF_COMMAND -var vvv_env=$ENV "$@"
+;;
+apply)
+  init
+  terraform $TF_COMMAND -var vvv_env=$ENV "$@"
+;;
+state)
+  terraform $TF_COMMAND "$@"
+;;
+esac
+
+exit_code=$?
+popd >&2
+
+exit $exit_code

@@ -1,0 +1,46 @@
+{
+  "variables": {
+    "component": "",
+    "build_number": "",
+    "subnet_id": "{{ env `public_subnet_id` }}",
+    "vpc_id": "{{ env `vpc_id` }}",
+    "mirror_url": "{{ env `mirror_url` }}"
+  },
+    "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "associate_public_ip_address": true,
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "profile": "default",
+      "ami_name": "{{ user `component` }}_{{ user `build_number` }}",
+      "vpc_id" : "{{ user `vpc_id` }}",
+      "subnet_id" : "{{ user `subnet_id` }}",
+      "tags": {
+        "Component": "{{ user `component` }}",
+        "Name": "{{ user `component` }}_{{ user `build_number`}}"
+      },
+      "source_ami_filter": {
+        "most_recent": true,
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*",
+          "root-device-type": "ebs"
+        }
+
+      }
+    }
+    ],
+  
+  "provisioners": [
+
+    {
+      "type": "shell",
+      "script": "source.sh" ,
+      "environment_vars": ["mirror_url={{ user `mirror_url` }}"]
+    }
+
+  ] 
+
+}

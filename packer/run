@@ -1,0 +1,33 @@
+#!/bin/bash
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+echo $COMPONENT >&2 
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+set -a
+source ~/.aws/env
+set +a
+logfile=logs/$COMPONENT-$BUILD_NUMBER.log
+shasum=$(shasum < $COMPONENT.json)
+packer build --var "component=$COMPONENT" --var "environment=$ENVIRONMENT" --var "build_number=$BUILD_NUMBER" -machine-readable $COMPONENT.json | tee $logfile >&2
+result=$?
+source_ami=$(grep 'artifact,0,id' $logfile | cut -d, -f6 | cut -d: -f2)
+
+output_name=${COMPONENT/-/_}
+
+echo "{\"${output_name}_source_ami\": \"$source_ami\"}"
+exit $result
+
