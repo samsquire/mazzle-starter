@@ -204,3 +204,22 @@ resource "aws_security_group_rule" "internet_updates_to_internet_encrypted" {
   type = "egress"
 }
 
+resource "aws_security_group_rule" "infrastructure_from_prometheus" {
+  security_group_id = "${data.terraform_remote_state.vpc.infrastructure_sg_id}"
+  source_security_group_id = "${data.terraform_remote_state.vpc.prometheus_sg_id}"
+  type = "ingress"
+  protocol = "tcp"
+  from_port = 9100
+  to_port = 9100
+}
+
+resource "aws_security_group_rule" "prometheus_to_infrastructure" {
+  source_security_group_id = "${data.terraform_remote_state.vpc.infrastructure_sg_id}"
+  security_group_id = "${data.terraform_remote_state.vpc.prometheus_sg_id}"
+  type = "egress"
+  protocol = "tcp"
+  from_port = 9100
+  to_port = 9100
+}
+
+

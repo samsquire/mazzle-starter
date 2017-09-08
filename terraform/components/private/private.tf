@@ -65,7 +65,8 @@ resource "aws_instance" "private" {
   }
   vpc_security_group_ids = [
     "${data.terraform_remote_state.security.need_secrets_sg_id}",
-    "${data.terraform_remote_state.vpc.private_sg_id}"
+    "${data.terraform_remote_state.vpc.private_sg_id}",
+    "${data.terraform_remote_state.vpc.infrastructure_sg_id}"
   ]
 }
 

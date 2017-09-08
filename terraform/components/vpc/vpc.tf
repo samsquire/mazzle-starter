@@ -28,14 +28,126 @@ resource "aws_eip" "outbound" {
   vpc = "true"
 }
 
+data "aws_ami" "nat_instance" {
+  most_recent = "true"
+  filter {
+    name = "name"
+    values = ["amzn-ami-vpc-nat*"]
+  }
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["137112412989"]
+}
 
-resource "aws_nat_gateway" "nat_gateway" {
-  subnet_id = "${aws_subnet.public.id}"  
-  allocation_id = "${aws_eip.outbound.id}"  
+data "template_file" "bootstrap" {
+  template = "${file("${path.module}/templates/bootstrap.sh")}"
+  vars {
+    vvv_env = "${var.vvv_env}" 
+  }
+}
+
+data "template_file" "node_exporter_bootstrap" {
+  template = "${file("${path.module}/../../templates/node_exporter_bootstrap.sh")}"
+  vars {}
+}
+
+data "template_cloudinit_config" "bootstrap" {
+  gzip = true
+  base64_encode = true
+
+  part {
+    content_type = "text/x-shellscript"
+    content = "${data.template_file.node_exporter_bootstrap.rendered}"
+    filename = "node_exporter_bootstrap.sh"
+  }
+  part {
+    content_type = "text/x-shellscript"
+    content = "${data.template_file.bootstrap.rendered}"
+    filename = "bootstrap.sh"
+  }
+}
+
+resource "aws_instance" "nat_instance" {
+  ami = "${data.aws_ami.nat_instance.id}"
+  instance_type = "t2.nano"
+  subnet_id = "${aws_subnet.public.id}"
+  key_name = "vvv-macbook"
+  vpc_security_group_ids = [
+    "${aws_security_group.nat_instance.id}",
+    "${aws_security_group.prometheus.id}"
+  ]
+  tags {
+    Name = "nat_instance"
+  }
+  source_dest_check = false
+  user_data = "${data.template_cloudinit_config.bootstrap.rendered}"
+}
+
+resource "aws_security_group" "nat_instance" {
+  name = "nat_instance"
+  description = "nat_instance"
+  vpc_id = "${aws_vpc.vpc.id}"
+}
+
+resource "aws_security_group_rule" "from_private" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "ingress"
+  protocol = "tcp"
+  from_port = "80"
+  to_port = "80"
+  cidr_blocks = ["${aws_subnet.private.cidr_block}"]
+}
+
+resource "aws_security_group_rule" "from_private_https" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "ingress"
+  protocol = "tcp"
+  from_port = "443"
+  to_port = "443"
+  cidr_blocks = ["${aws_subnet.private.cidr_block}"]
+}
+
+
+resource "aws_security_group_rule" "from_me" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "ingress"
+  protocol = "tcp"
+  from_port = "22"
+  to_port = "22"
+  cidr_blocks = ["86.53.244.42/32"]
+}
+
+resource "aws_security_group_rule" "to_internet_80" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "egress"
+  protocol = "tcp"
+  from_port = "80"
+  to_port = "80"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "to_internet_443" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "egress"
+  protocol = "tcp"
+  from_port = "443"
+  to_port = "443"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_eip" "nat_instance" {
+  vpc = "true"
+}
+
+resource "aws_eip_association" "nat_instance" {
+  instance_id = "${aws_instance.nat_instance.id}"
+  allocation_id = "${aws_eip.nat_instance.id}"
 }
 
 resource "aws_eip" "public" {
-  vpc = "true" 
+  vpc = "true"
 }
 
 output "aws_eip_public_id" {
@@ -50,7 +162,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  route_table_id = "${aws_route_table.private.id}" 
+  route_table_id = "${aws_route_table.private.id}"
   subnet_id = "${aws_subnet.private.id}"
 }
 
@@ -71,8 +183,9 @@ resource "aws_route" "to_internet" {
 resource "aws_route" "to_nat_gateway" {
   route_table_id = "${aws_route_table.private.id}"
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = "${aws_nat_gateway.nat_gateway.id}"
-  depends_on = ["aws_nat_gateway.nat_gateway"]
+  // nat_gateway_id = "${aws_nat_gateway.nat_gateway.id}"
+  instance_id = "${aws_instance.nat_instance.id}"
+  depends_on = ["aws_instance.nat_instance"]
 }
 
 resource "aws_route_table_association" "to_internet" {
@@ -111,7 +224,6 @@ resource "aws_security_group" "infrastructure" {
     Environment = "${var.vvv_env}"
   }
 }
-
 resource "aws_security_group" "rsync_updates" {
   name = "rsync_updates"
   description = "rsync_updates security group"
@@ -132,6 +244,19 @@ resource "aws_security_group" "internet_updates" {
   }
 }
 
+resource "aws_security_group" "prometheus" {
+  name = "prometheus"
+  description = "prometheus security group"
+  vpc_id = "${aws_vpc.vpc.id}" 
+  tags {
+    Name = "prometheus"
+    Environment = "${var.vvv_env}"
+  }
+}
+
+output "prometheus_sg_id" {
+  value = "${aws_security_group.prometheus.id}"
+}
 
 output "private_sg_id" {
   value = "${aws_security_group.private.id}"

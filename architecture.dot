@@ -3,7 +3,7 @@ digraph G {
 
 /* List your components */  
 "chef/ubuntu_java";
-"packer/source-ami*";
+"packer/source-ami";
 "packer/ubuntu-java";
 "terraform/vpc";
 "terraform/users";
@@ -14,12 +14,13 @@ digraph G {
 "packer/vault-ami";
 "terraform/vault";
 "terraform/security";
+"terraform/services";
 "terraform/dns";
 "shell/root-certificates";
 "packer/authenticated-ami";
 
 /* List dependencies */
-"packer/source-ami*" -> "terraform/bastion";
+"packer/source-ami" -> "terraform/bastion";
 
 /* "terraform/vpc" -> "terraform/repository"; */
 /* "terraform/dns" -> "terraform/repository"; */
@@ -31,16 +32,18 @@ digraph G {
 /* "terraform/vpc" -> "terraform/repository-volume"; */
 /* "terraform/repository-volume" -> "terraform/repository"; */
 
+"terraform/vault" -> "terraform/services";
+"terraform/bastion" -> "terraform/services";
 
 "terraform/vpc" -> "terraform/vault-volume";
-"terraform/vpc" -> "packer/source-ami*";
+"terraform/vpc" -> "packer/source-ami";
 
 "terraform/vpc" -> "packer/vault-ami";
 "packer/vault-ami" -> "terraform/vault";
 
 "terraform/vault-volume" -> "terraform/vault";
 
-"packer/source-ami*" -> "packer/vault-ami";
+"packer/source-ami" -> "packer/vault-ami";
 
  "terraform/dns" -> "terraform/private";
 
@@ -64,7 +67,7 @@ digraph G {
 
 "packer/ubuntu-java" -> "terraform/private";
 
-"packer/source-ami*" -> "packer/authenticated-ami";
+"packer/source-ami" -> "packer/authenticated-ami";
 "packer/authenticated-ami" -> "packer/ubuntu-java";
 
 }

@@ -16,6 +16,16 @@ data "terraform_remote_state" "repository" {
   }
 }
 
+data "terraform_remote_state" "dns" {
+  backend = "s3"
+  config {
+    bucket = "vvv-${var.vvv_env}-state"
+    key    = "dns/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}
+
+
 data "template_file" "bootstrap" {
   template = "${file("${path.module}/templates/bootstrap.sh")}" 
   vars {
@@ -42,21 +52,24 @@ data "terraform_remote_state" "security" {
     region = "eu-west-2"
   }
 }
-
 resource "aws_instance" "bastion" {
   user_data = "${data.template_cloudinit_config.cloudinit.rendered}"
   ami = "${data.aws_ami.source.id}"
   subnet_id = "${data.terraform_remote_state.vpc.public_subnet_id}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
+  instance_type = "t2.nano"
   tags {
     Name = "bastion"
     Environment = "${var.vvv_env}"
   }
   vpc_security_group_ids = [
+    "${data.terraform_remote_state.vpc.infrastructure_sg_id}",
     "${data.terraform_remote_state.security.bastion_sg_id}",
     "${data.terraform_remote_state.vpc.internet_updates_sg_id}"
   ]
+}
+output "bastion_private_ip" {
+  value = "${aws_instance.bastion.private_ip}"
 }
 
 resource "aws_eip_association" "public" {

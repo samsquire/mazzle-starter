@@ -119,13 +119,14 @@ resource "aws_instance" "vault" {
   user_data = "${data.template_cloudinit_config.vault.rendered}"
   subnet_id = "${data.terraform_remote_state.vpc.private_subnet_id}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
+  instance_type = "t2.nano"
   tags {
     Name = "vault"
     Environment = "${var.vvv_env}"
     Volume = "${data.terraform_remote_state.volume.vault_volume_id}"
   }
   vpc_security_group_ids = [
+    "${data.terraform_remote_state.vpc.infrastructure_sg_id}",
     "${data.terraform_remote_state.vpc.private_sg_id}",
     "${data.terraform_remote_state.security.vault_sg_id}"
   ]
