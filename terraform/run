@@ -21,7 +21,9 @@ shift
 set -a
 source ~/.aws/env
 set +a
-./t $ENV $COMPONENT apply >&2
+export HOME=/home/$(whoami)
+COMMON=$(readlink -f common.tfvars)
+./t $ENV $COMPONENT apply -var-file $COMMON >&2
 exit_code=$?
 ./t $ENV $COMPONENT output | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r
 exit $exit_code

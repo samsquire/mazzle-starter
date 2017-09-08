@@ -73,7 +73,7 @@ resource "aws_instance" "nat_instance" {
   ami = "${data.aws_ami.nat_instance.id}"
   instance_type = "t2.nano"
   subnet_id = "${aws_subnet.public.id}"
-  key_name = "vvv-macbook"
+  key_name = "${var.key_name}"
   vpc_security_group_ids = [
     "${aws_security_group.nat_instance.id}",
     "${aws_security_group.prometheus.id}"
@@ -117,6 +117,15 @@ resource "aws_security_group_rule" "from_me" {
   from_port = "22"
   to_port = "22"
   cidr_blocks = ["86.53.244.42/32"]
+}
+
+resource "aws_security_group_rule" "from_home" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type = "ingress"
+  protocol = "tcp"
+  from_port = "22"
+  to_port = "22"
+  cidr_blocks = ["82.26.172.70/32"]
 }
 
 resource "aws_security_group_rule" "to_internet_80" {

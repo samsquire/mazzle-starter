@@ -58,7 +58,7 @@ resource "aws_instance" "private" {
   ami = "${data.aws_ami.java_ami.id}"
   subnet_id = "${data.terraform_remote_state.vpc.private_subnet_id}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
+  instance_type = "t2.nano"
   tags {
     Name = "private"
     Environment = "${var.vvv_env}"

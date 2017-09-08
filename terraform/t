@@ -33,7 +33,7 @@ pushd $COMPONENT_PATH >&2
 rm -rf .state
 mkdir -p .state
 function init() {
- terraform init -backend=true \
+ terraform init --reconfigure -backend=true \
    -backend-config=bucket=vvv-$ENV-state\
    -backend-config=key=$COMPONENT/terraform.tfstate \
    -backend-config=region=eu-west-2

@@ -24,6 +24,15 @@ data "terraform_remote_state" "vault" {
   }
 }
 
+data "terraform_remote_state" "private" {
+  backend = "s3"
+  config {
+    bucket = "vvv-${var.vvv_env}-state"
+    key = "private/terraform.tfstate" 
+    region = "eu-west-2"
+  }
+}
+
 resource "aws_route53_record" "nodes" {
   type = "SRV"
   name = "nodes" 
@@ -31,7 +40,8 @@ resource "aws_route53_record" "nodes" {
   ttl = "30"
   records = [
     "1 1 9100 ${data.terraform_remote_state.bastion.bastion_private_ip}",
-    "1 1 9100 ${data.terraform_remote_state.vault.vault_private_ip}"
+    "1 1 9100 ${data.terraform_remote_state.vault.vault_private_ip}",
+    "1 1 9100 ${data.terraform_remote_state.private.private_instance_ip_address}",
   ]
 }
 
