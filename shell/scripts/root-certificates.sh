@@ -7,10 +7,10 @@ bastion_ip = os.environ["bastion_public"]
 vault_ip = os.environ["vault_private_ip"]
 args = ["ssh",
   "-o",
-  "ProxyCommand ssh -W %h:%p -i ~/.ssh/sam-macbook-aws ubuntu@{}".format(bastion_ip),
+  "ProxyCommand ssh -W %h:%p -i ~/.ssh/vvv-sam-n550jv ubuntu@{}".format(bastion_ip),
   "ubuntu@{}".format(vault_ip),
   "-i",
-  "~/.ssh/sam-macbook-aws",
+  "~/.ssh/vvv-sam-n550jv",
   "cat",
   "/data/vault/ca/root.cer"]
 
