@@ -34,6 +34,7 @@ digraph G {
 
 "terraform/vault" -> "terraform/services";
 "terraform/bastion" -> "terraform/services";
+"terraform/private" -> "terraform/services";
 
 "terraform/vpc" -> "terraform/vault-volume";
 "terraform/vpc" -> "packer/source-ami";
