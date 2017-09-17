@@ -12,3 +12,4 @@ packer/logs/
 outputs
 ._*
 ansible/roles/
+venv
