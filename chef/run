@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "{}"
+exit 0
+export PATH=/usr/bin/:$PATH
+export HOME=/home/$(whoami)
+pushd applications/$2 >&2 
+chef exec kitchen test >&2  
+popd >&2 
+
+echo "{}"

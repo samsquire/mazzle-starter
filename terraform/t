@@ -61,6 +61,9 @@ apply)
 state)
   terraform $TF_COMMAND "$@"
 ;;
+validate)
+  terraform $TF_COMMAND -var vvv_env=$ENV "$@"
+;;
 esac
 
 exit_code=$?

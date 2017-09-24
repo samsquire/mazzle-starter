@@ -1,0 +1,22 @@
+DEPENDENCIES
+  apt
+  java
+  ubuntu_java
+    path: .
+    metadata: true
+
+GRAPH
+  apt (5.1.0)
+    compat_resource (>= 12.16.3)
+  compat_resource (12.19.0)
+  homebrew (4.2.0)
+  java (1.50.0)
+    apt (>= 0.0.0)
+    homebrew (>= 0.0.0)
+    windows (>= 0.0.0)
+  ohai (5.1.0)
+  ubuntu_java (0.1.0)
+    apt (~> 5.0)
+    java (>= 0.0.0)
+  windows (3.1.1)
+    ohai (>= 4.0.0)

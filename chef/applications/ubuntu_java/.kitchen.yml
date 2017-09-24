@@ -1,0 +1,17 @@
+driver:
+ name: vagrant
+ vagrant_binary: /opt/vagrant/bin/vagrant
+ customize:
+   vram: 100
+   cableconnected1: "on"
+
+provisioner:
+ name: chef_zero
+
+platforms:
+ - name: ubuntu-16.04
+
+suites:
+- name: default
+  run_list:
+    - recipe[ubuntu_java]

@@ -13,3 +13,6 @@ outputs
 ._*
 ansible/roles/
 venv
+logs
+fpm/node-v0.6.0
+fpm/*.tar.gz

@@ -71,7 +71,9 @@ digraph G {
 "packer/source-ami*" -> "packer/authenticated-ami*";
 "packer/authenticated-ami*" -> "packer/ubuntu-java*";
 
-"shell/root-certificates" -> "shell/init";
+"shell/root-certificates" -> "shell/init-vault";
+
+"fpm/node"
 
 /* "shell/init" -> "shell/test"; */
 
