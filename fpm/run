@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "fpm run" >&2
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+make -f $COMPONENT.Makefile
+
