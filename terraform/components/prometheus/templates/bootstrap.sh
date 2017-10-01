@@ -1,5 +1,6 @@
 #!/bin/bash
 cd /tmp
+
 curl -L -s https://github.com/prometheus/prometheus/releases/download/v2.0.0-beta.2/prometheus-2.0.0-beta.2.linux-amd64.tar.gz \
   | tar -xzvf - 
 mv prometheus-2.0.0-beta.2.linux-amd64/prometheus /bin/prometheus
@@ -37,22 +38,25 @@ scrape_configs:
 
 EOF
 
-cat << 'EOF' | sudo tee /etc/init/prometheus.conf > /dev/null
-#!upstart
+cat << EOF | sudo tee /etc/systemd/system/prometheus.service > /dev/null
+[Unit]
+Description=prometheus
+Requires=network-online.target
 
-description "prometheus"
-start on startup
-stop on shutdown
+[Service]
+Type=simple
+ExecStart=/bin/prometheus --storage.tsdb.path="/tmp/prometheus/" --config.file=/etc/prometheus/prometheus.yml
 
-respawn
-exec /bin/prometheus --storage.tsdb.path="/tmp/prometheus/" --config.file=/etc/prometheus/prometheus.yml
-
+[Install]
+WantedBy=multi-user.target
 EOF
 
-sudo start prometheus
 
-wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.4.3-1.x86_64.rpm
-sudo yum -y localinstall grafana-4.4.3-1.x86_64.rpm
+sudo service prometheus start 
+
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.5.2_amd64.deb
+sudo apt-get install -y adduser libfontconfig
+sudo dpkg -i grafana_4.5.2_amd64.deb
 sudo mkdir -p /etc/grafana
 
 cat << 'EOF' | sudo tee /etc/grafana/grafana.ini >/dev/null

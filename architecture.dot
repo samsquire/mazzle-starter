@@ -19,6 +19,9 @@ digraph G {
 "shell/root-certificates";
 "packer/authenticated-ami*";
 
+"packer/source-ami*" -> "terraform/prometheus";
+"terraform/vpc" -> "terraform/prometheus";
+
 /* List dependencies */
 "packer/source-ami*" -> "terraform/bastion";
 
@@ -47,6 +50,7 @@ digraph G {
 "packer/source-ami*" -> "packer/vault-ami*";
 
  "terraform/dns" -> "terraform/private";
+ "terraform/dns" -> "terraform/vault";
 
 "terraform/security" -> "terraform/vault"
 "terraform/vpc" -> "terraform/vault";
@@ -73,9 +77,10 @@ digraph G {
 
 "shell/root-certificates" -> "shell/init-vault";
 
-"fpm/node"
+/* "fpm/node*" */
 
 /* "shell/init" -> "shell/test"; */
 
+ "terraform/dns" -> "terraform/prometheus";
 }
 

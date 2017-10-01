@@ -41,54 +41,27 @@ data "aws_ami" "nat_instance" {
   owners = ["137112412989"]
 }
 
-data "template_file" "bootstrap" {
-  template = "${file("${path.module}/templates/bootstrap.sh")}"
-  vars {
-    vvv_env = "${var.vvv_env}" 
-  }
-}
-
-data "template_file" "node_exporter_bootstrap" {
-  template = "${file("${path.module}/../../templates/node_exporter_bootstrap.sh")}"
-  vars {}
-}
-
-data "template_cloudinit_config" "bootstrap" {
-  gzip = true
-  base64_encode = true
-
-  part {
-    content_type = "text/x-shellscript"
-    content = "${data.template_file.node_exporter_bootstrap.rendered}"
-    filename = "node_exporter_bootstrap.sh"
-  }
-  part {
-    content_type = "text/x-shellscript"
-    content = "${data.template_file.bootstrap.rendered}"
-    filename = "bootstrap.sh"
-  }
-}
-
 resource "aws_instance" "nat_instance" {
   ami = "${data.aws_ami.nat_instance.id}"
   instance_type = "t2.nano"
   subnet_id = "${aws_subnet.public.id}"
   key_name = "${var.key_name}"
   vpc_security_group_ids = [
-    "${aws_security_group.nat_instance.id}",
-    "${aws_security_group.prometheus.id}"
+    "${aws_security_group.nat_instance.id}"
   ]
   tags {
     Name = "nat_instance"
   }
   source_dest_check = false
-  user_data = "${data.template_cloudinit_config.bootstrap.rendered}"
 }
 
 resource "aws_security_group" "nat_instance" {
   name = "nat_instance"
   description = "nat_instance"
   vpc_id = "${aws_vpc.vpc.id}"
+  tags {
+    Name = "nat_instance"
+  }
 }
 
 resource "aws_security_group_rule" "from_private" {
@@ -261,6 +234,10 @@ resource "aws_security_group" "prometheus" {
     Name = "prometheus"
     Environment = "${var.vvv_env}"
   }
+}
+
+output "nat_instance_sg_id" {
+  value = "${aws_security_group.nat_instance.id}"
 }
 
 output "prometheus_sg_id" {
