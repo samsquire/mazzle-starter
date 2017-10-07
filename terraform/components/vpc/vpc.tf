@@ -236,6 +236,16 @@ resource "aws_security_group" "prometheus" {
   }
 }
 
+resource "aws_security_group" "elasticsearch" {
+  name = "elasticsearch"
+  description = "elasticsearch security group"
+  vpc_id = "${aws_vpc.vpc.id}"
+  tags {
+    Name = "elasticsearch"
+    Environment = "${var.vvv_env}"
+  }
+}
+
 output "nat_instance_sg_id" {
   value = "${aws_security_group.nat_instance.id}"
 }
@@ -255,6 +265,11 @@ output "infrastructure_sg_id" {
 output "internet_updates_sg_id" {
   value = "${aws_security_group.internet_updates.id}"
 }
+
 output "rsync_updates_sg_id" {
   value = "${aws_security_group.rsync_updates.id}"
+}
+
+output "elasticsearch_sg_id" {
+  value = "${aws_security_group.elasticsearch.id}"
 }
