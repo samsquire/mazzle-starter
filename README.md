@@ -20,3 +20,8 @@ This is an experimental infrastructure to demonstrate the tool [devops-pipeline]
 * Centralised logging 
 * Put Prometheus on its own box
 * Audit
+
+# Expanded pipeline
+
+
+![ExpandedPipeline](architecture.expanded.png)
