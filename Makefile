@@ -8,7 +8,7 @@ venv/bin/activate: requirements.txt
 	. venv/bin/activate; venv/bin/pip install -Ur requirements.txt
 	touch venv/bin/activate
 
-$(pngs): $(dots)
-	dot -T png -o $@ $<
+%.png: %.dot
+	dot -Tpng -o $@ $<
 
 diagrams: $(pngs)
