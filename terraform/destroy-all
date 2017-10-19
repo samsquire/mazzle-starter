@@ -9,6 +9,7 @@ var_file=$(readlink -f common.tfvars)
 
 ./t laptop-backup vault-volume destroy -force
 ./t laptop-backup services destroy -force
+./t laptop-backup elasticsearch destroy -force -var-file $var_file
 ./t laptop-backup prometheus destroy -force -var-file $var_file
 ./t laptop-backup dns destroy -force
 ./t laptop-backup security destroy -force

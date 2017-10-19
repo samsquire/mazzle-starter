@@ -22,6 +22,9 @@ digraph G {
 "packer/source-ami*" -> "terraform/prometheus";
 "terraform/vpc" -> "terraform/prometheus";
 
+
+/* "terraform/elasticsearch"; */
+
 /* List dependencies */
 "packer/source-ami*" -> "terraform/bastion";
 
@@ -82,5 +85,10 @@ digraph G {
 /* "shell/init" -> "shell/test"; */
 
  "terraform/dns" -> "terraform/prometheus";
+
+/* "terraform/vpc" -> "terraform/elasticsearch"; */
+
+/* "packer/ubuntu-java*" -> "terraform/elasticsearch"; */
+
 }
 
