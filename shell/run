@@ -21,8 +21,7 @@ env >&2.
 
 echo $bastion_public >&2.
 . ../venv/bin/activate >&2.
-env ./scripts/$COMPONENT.sh $ENV
+env ./scripts/$COMPONENT.sh $ENV > build/${COMPONENT}.outputs.json
 result=$?
 
 exit $result
-

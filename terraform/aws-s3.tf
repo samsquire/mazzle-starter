@@ -6,7 +6,8 @@ resource "aws_s3_bucket" "state_bucket" {
     enabled = true
   }
 
-  tags {
+  tags = {
     Name = "vvv terraform state bucket"
   }
 }
+

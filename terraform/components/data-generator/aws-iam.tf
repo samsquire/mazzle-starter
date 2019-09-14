@@ -16,11 +16,12 @@ resource "aws_iam_role" "data_generator" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_instance_profile" "data_generator" {
   name = "data_generator"
-  role = "${aws_iam_role.data_generator.name}"
+  role = aws_iam_role.data_generator.name
 }
 
 data "aws_iam_policy_document" "see_content_bucket" {
@@ -64,10 +65,11 @@ data "aws_iam_policy_document" "see_content_bucket" {
 resource "aws_iam_policy" "content_policy" {
   name   = "${var.vvv_env}_content_policy"
   path   = "/"
-  policy = "${data.aws_iam_policy_document.see_content_bucket.json}"
+  policy = data.aws_iam_policy_document.see_content_bucket.json
 }
 
 resource "aws_iam_role_policy_attachment" "data_generator_s3" {
-  role       = "${aws_iam_role.data_generator.name}"
-  policy_arn = "${aws_iam_policy.content_policy.arn}"
+  role       = aws_iam_role.data_generator.name
+  policy_arn = aws_iam_policy.content_policy.arn
 }
+

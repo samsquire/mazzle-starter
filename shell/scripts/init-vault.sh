@@ -8,6 +8,8 @@ bastion_ip = os.environ["bastion_public"]
 vault_ip = os.environ["vault_private_ip"]
 args = ["ssh",
   "-o",
+  "StrictHostKeyChecking=no",
+  "-o",
   "ProxyCommand ssh -W %h:%p -i ~/.ssh/vvv-sam-n550jv ubuntu@{}".format(bastion_ip),
   "ubuntu@{}".format(vault_ip),
   "-i",
@@ -16,9 +18,8 @@ args = ["ssh",
   "VAULT_CACERT=/data/vault/ca/root.cer",
   "vault init"]
 
-unseal_cert = run(args, stdout=PIPE) 
+unseal_cert = run(args, stdout=PIPE)
 unseal_result = unseal_cert.stdout.decode('utf-8')
 sys.stderr.write(unseal_result)
 print(json.dumps({"secrets": unseal_result}))
 sys.exit(unseal_cert.returncode)
-

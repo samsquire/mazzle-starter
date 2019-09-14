@@ -1,11 +1,11 @@
-data "aws_ami" "ubuntu" { 
+data "aws_ami" "ubuntu" {
   most_recent = true
   filter {
-    name = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"] 
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
   filter {
-    name = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
   owners = ["099720109477"]
@@ -13,7 +13,7 @@ data "aws_ami" "ubuntu" {
 
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-  config {
+  config = {
     bucket = "vvv-${var.vvv_env}-state"
     key    = "vpc/terraform.tfstate"
     region = "eu-west-2"
@@ -30,9 +30,9 @@ data "terraform_remote_state" "security" {
 }
 
 data "terraform_remote_state" "repository_volume" {
-  backend = "s3" 
-  config {
-    bucket = "vvv-${var.vvv_env}-state" 
+  backend = "s3"
+  config = {
+    bucket = "vvv-${var.vvv_env}-state"
     key    = "repository-volume/terraform.tfstate"
     region = "eu-west-2"
   }
@@ -40,61 +40,61 @@ data "terraform_remote_state" "repository_volume" {
 
 data "terraform_remote_state" "dns" {
   backend = "s3"
-  config {
+  config = {
     bucket = "vvv-${var.vvv_env}-state"
-    key = "dns/terraform.tfstate"
+    key    = "dns/terraform.tfstate"
     region = "eu-west-2"
   }
 }
 
 resource "aws_route53_record" "repository" {
-  zone_id = "${data.terraform_remote_state.dns.subenvironment_zone_id}"
-  name = "mirror"
-  type = "A"
-  ttl = "30"
+  zone_id = data.terraform_remote_state.dns.outputs.subenvironment_zone_id
+  name    = "mirror"
+  type    = "A"
+  ttl     = "30"
   records = [
-    "${aws_instance.repository.private_ip}"
+    aws_instance.repository.private_ip,
   ]
 }
 
 module "volume" {
-  source = "../../module-templates/volume-mounting"
-  role = "${aws_iam_role.repository.name}"
-  device_name = "/dev/xvdb"  
-  mount_point  = "/data/mirror"
+  source      = "../../module-templates/volume-mounting"
+  role        = aws_iam_role.repository.name
+  device_name = "/dev/xvdb"
+  mount_point = "/data/mirror"
 }
 
 data "template_file" "bootstrap" {
-  template = "${file("${path.module}/templates/bootstrap.sh")}"
+  template = file("${path.module}/templates/bootstrap.sh")
 
-  vars {
-    device_name = "${module.volume.device_name}"
+  vars = {
+    device_name = module.volume.device_name
   }
 }
 
 data "template_cloudinit_config" "cloudinit" {
-  gzip = true
+  gzip          = true
   base64_encode = true
-  
+
   part {
-    filename = "volume_bootstrap.sh"
+    filename     = "volume_bootstrap.sh"
     content_type = "text/x-shellscript"
-    content = "${module.volume.rendered_volume_bootstrap}"
+    content      = module.volume.rendered_volume_bootstrap
   }
   part {
-    filename = "bootstrap.sh"
+    filename     = "bootstrap.sh"
     content_type = "text/x-shellscript"
-    content = "${data.template_file.bootstrap.rendered}"
+    content      = data.template_file.bootstrap.rendered
   }
 
   part {
     content_type = "text/cloud-config"
-    content = "${module.volume.rendered_cloudconfig}"
+    content      = module.volume.rendered_cloudconfig
   }
 }
 
 resource "aws_iam_role" "repository" {
-  name = "repository"
+  name               = "repository"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -110,30 +110,31 @@ resource "aws_iam_role" "repository" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_instance_profile" "repository" {
-  name = "repository" 
-  role = "${aws_iam_role.repository.name}"
+  name = "repository"
+  role = aws_iam_role.repository.name
 }
 
 resource "aws_instance" "repository" {
-  iam_instance_profile = "${aws_iam_instance_profile.repository.name}"
-  ami = "${data.aws_ami.ubuntu.id}"
-  subnet_id = "${data.terraform_remote_state.vpc.private_subnet_id}"
-  key_name = "${var.key_name}"
-  user_data = "${data.template_cloudinit_config.cloudinit.rendered}"
-  instance_type = "t2.micro"
-  tags {
-    Name = "repository"
-    Environment = "${var.vvv_env}"
-    Volume = "${data.terraform_remote_state.repository_volume.mirror_volume_id}"
+  iam_instance_profile = aws_iam_instance_profile.repository.name
+  ami                  = data.aws_ami.ubuntu.id
+  subnet_id            = data.terraform_remote_state.vpc.outputs.private_subnet_id
+  key_name             = var.key_name
+  user_data            = data.template_cloudinit_config.cloudinit.rendered
+  instance_type        = "t2.micro"
+  tags = {
+    Name        = "repository"
+    Environment = var.vvv_env
+    Volume      = data.terraform_remote_state.repository_volume.outputs.mirror_volume_id
   }
   vpc_security_group_ids = [
-    "${data.terraform_remote_state.vpc.infrastructure_sg_id}",
-    "${data.terraform_remote_state.vpc.internet_updates_sg_id}",
-    "${data.terraform_remote_state.vpc.rsync_updates_sg_id}",
-    "${data.terraform_remote_state.security.need_secrets_sg_id}"
+    data.terraform_remote_state.vpc.outputs.infrastructure_sg_id,
+    data.terraform_remote_state.vpc.outputs.internet_updates_sg_id,
+    data.terraform_remote_state.vpc.outputs.rsync_updates_sg_id,
+    data.terraform_remote_state.security.outputs.need_secrets_sg_id,
   ]
 }
 

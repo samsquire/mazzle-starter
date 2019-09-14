@@ -6,7 +6,7 @@ if [ -z $ENV ] ; then
   exit 1
 fi
 
-echo "Using $ENV" >&2
+# echo "Using $ENV" >&2
 
 shift
 COMPONENT=$1
@@ -32,31 +32,35 @@ COMPONENT_PATH=components/$COMPONENT
 pushd $COMPONENT_PATH >&2
 rm -rf .state
 mkdir -p .state
-function init() {
+function initialize() {
  terraform init --reconfigure -backend=true \
    -backend-config=bucket=vvv-$ENV-state\
    -backend-config=key=$COMPONENT/terraform.tfstate \
    -backend-config=region=eu-west-2
 }
- 
+
 case $TF_COMMAND in
+init)
+  initialize
+;;
 plan)
-  init
+  initialize
   terraform $TF_COMMAND -var vvv_env=$ENV "$@"
 ;;
 taint)
-  init
+  initialize
   terraform $TF_COMMAND "$@"
 ;;
 output)
-  terraform $TF_COMMAND -json "$@"
+  terraform $TF_COMMAND -json "$@" | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r > ../../build/${COMPONENT}.outputs.json
 ;;
 destroy)
+  initialize
   terraform $TF_COMMAND -var vvv_env=$ENV "$@"
 ;;
 apply)
-  init
-  terraform $TF_COMMAND -var vvv_env=$ENV "$@"
+  initialize
+  terraform $TF_COMMAND -var vvv_env=$ENV -auto-approve "$@"
 ;;
 state)
   terraform $TF_COMMAND "$@"
@@ -67,9 +71,14 @@ validate)
 console)
   terraform $TF_COMMAND "$@"
 ;;
+0.12upgrade)
+  terraform $TF_COMMAND "$@"
+;;
+version)
+  terraform $TF_COMMAND "$@"
+;;
 esac
 
 exit_code=$?
-popd >&2
 
 exit $exit_code

@@ -1,16 +1,17 @@
 digraph G {
   label="pipeline";
 
-/* List your components */  
+/* List your components */
+"terraform/buckets";
 "chef/ubuntu_java";
 "packer/source-ami*";
 "packer/ubuntu-java*";
 "terraform/vpc";
 "terraform/users";
 "terraform/bastion";
- "terraform/private"; 
-/* "terraform/repository"; */
-/* "terraform/repository-volume"; */
+ "terraform/private";
+"terraform/repository";
+"terraform/repository-volume";
 "packer/vault-ami*";
 "terraform/vault";
 "terraform/security";
@@ -18,25 +19,22 @@ digraph G {
 "terraform/dns";
 "shell/root-certificates";
 "packer/authenticated-ami*";
-
+"terraform/vpc" -> "terraform/repository-volume";
+"terraform/repository-volume" -> "terraform/repository";
 "packer/source-ami*" -> "terraform/prometheus";
 "terraform/vpc" -> "terraform/prometheus";
-
+"terraform/repository" -> "terraform/bastion";
+"terraform/vpc" -> "terraform/repository";
 
 /* "terraform/elasticsearch"; */
 
 /* List dependencies */
 "packer/source-ami*" -> "terraform/bastion";
 
-/* "terraform/vpc" -> "terraform/repository"; */
-/* "terraform/dns" -> "terraform/repository"; */
-/* "terraform/security" -> "terraform/repository"; */
-/* "terraform/repository" -> "packer/source-ami"; */
 
 "terraform/vpc" -> "terraform/dns";
  "terraform/vault" -> "terraform/private";
-/* "terraform/vpc" -> "terraform/repository-volume"; */
-/* "terraform/repository-volume" -> "terraform/repository"; */
+
 
 "terraform/vault" -> "terraform/services";
 "terraform/bastion" -> "terraform/services";
@@ -59,10 +57,11 @@ digraph G {
 "terraform/vpc" -> "terraform/vault";
 
 "terraform/security" -> "terraform/bastion";
- "terraform/security" -> "terraform/private"; 
+ "terraform/security" -> "terraform/private";
 "terraform/vpc" -> "terraform/security";
 
 "chef/ubuntu_java" -> "packer/ubuntu-java*";
+
 "terraform/users" -> "terraform/vpc"
 
 "terraform/vpc" ->"terraform/private";
@@ -80,15 +79,6 @@ digraph G {
 
 "shell/root-certificates" -> "shell/init-vault";
 
-/* "fpm/node*" */
-
-/* "shell/init" -> "shell/test"; */
-
  "terraform/dns" -> "terraform/prometheus";
-
-/* "terraform/vpc" -> "terraform/elasticsearch"; */
-
-/* "packer/ubuntu-java*" -> "terraform/elasticsearch"; */
-
+ "terraform/buckets" -> "terraform/users";
 }
-

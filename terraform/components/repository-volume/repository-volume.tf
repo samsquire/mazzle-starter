@@ -8,20 +8,20 @@ data "terraform_remote_state" "vpc" {
 }
 
 data "aws_subnet" "private" {
-  id = "${data.terraform_remote_state.vpc.private_subnet_id}"
+  id = data.terraform_remote_state.vpc.outputs.private_subnet_id
 }
 
 resource "aws_ebs_volume" "mirror" {
   type = "sc1"
-  tags {
-    Environment = "${var.vvv_env}"
-    Name = "mirror"
+  tags = {
+    Environment = var.vvv_env
+    Name        = "mirror"
   }
-  size = 500
-  availability_zone = "${data.aws_subnet.private.availability_zone}" 
+  size              = 500
+  availability_zone = data.aws_subnet.private.availability_zone
 }
 
 output "mirror_volume_id" {
-  value = "${aws_ebs_volume.mirror.id}"
+  value = aws_ebs_volume.mirror.id
 }
 

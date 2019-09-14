@@ -1,10 +1,28 @@
 #!/bin/bash
-echo "{}"
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+echo $COMPONENT >&2
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+
+echo "{}" > build/${COMPONENT}.outputs.json
+
 exit 0
 export PATH=/usr/bin/:$PATH
 export HOME=/home/$(whoami)
-pushd applications/$2 >&2 
-chef exec kitchen test >&2  
-popd >&2 
-
-echo "{}"
+pushd applications/$2 >&2
+chef exec kitchen test >&2
+popd >&2

@@ -9,7 +9,7 @@ fi
 shift
 
 COMPONENT=$1
-echo $COMPONENT >&2 
+echo $COMPONENT >&2
 
 if [ -z $COMPONENT ] ; then
   echo "need to provide component name"
@@ -28,6 +28,5 @@ source_ami=$(grep 'artifact,0,id' $logfile | cut -d, -f6 | cut -d: -f2)
 
 output_name=${COMPONENT/-/_}
 
-echo "{\"${output_name}_source_ami\": \"$source_ami\"}"
+echo "{\"${output_name}_source_ami\": \"$source_ami\"}" > build/${COMPONENT}.outputs.json
 exit $result
-

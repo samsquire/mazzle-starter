@@ -1,18 +1,18 @@
 #!/bin/bash
 var_file=$(readlink -f common.tfvars)
 
-./t laptop-backup bastion destroy -force -var-file $var_file
-./t laptop-backup private destroy -force -var-file $var_file
-./t laptop-backup repository destroy -force
-./t laptop-backup repository-volume destroy -force
-./t laptop-backup vault destroy -force -var-file $var_file
+./t home bastion destroy -force -var-file $var_file
+./t home private destroy -force -var-file $var_file
+./t home repository destroy -force -var-file $var_file
+./t home repository-volume destroy -force -var-file $var_file
+./t home vault destroy -force -var-file $var_file
 
-./t laptop-backup vault-volume destroy -force
-./t laptop-backup services destroy -force
-./t laptop-backup elasticsearch destroy -force -var-file $var_file
-./t laptop-backup prometheus destroy -force -var-file $var_file
-./t laptop-backup dns destroy -force
-./t laptop-backup security destroy -force
+./t home vault-volume destroy -force -var-file $var_file
+./t home services destroy -force -var-file $var_file
+./t home elasticsearch destroy -force -var-file $var_file
+./t home prometheus destroy -force -var-file $var_file
+./t home dns destroy -force -var-file $var_file
+./t home security destroy -force -var-file $var_file
 
-./t laptop-backup vpc destroy -force -var-file $var_file
-./t laptop-backup users destroy -force
+./t home vpc destroy -force -var-file $var_file
+./t home users destroy -force -var-file $var_file

@@ -16,3 +16,5 @@ venv
 logs
 fpm/node-v0.6.0
 fpm/*.tar.gz*
+shell/build
+terraform/build

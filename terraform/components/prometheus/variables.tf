@@ -1,2 +1,9 @@
-variable "vvv_env" {}
-variable "key_name" {}
+variable "vvv_env" {
+}
+
+variable "key_name" {
+}
+
+variable "me" {
+}
+

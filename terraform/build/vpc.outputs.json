@@ -1,0 +1,13 @@
+{
+  "aws_eip_public_id": "eipalloc-05e7b5aad45026ce6",
+  "elasticsearch_sg_id": "sg-0ec297af61ffbb6bd",
+  "infrastructure_sg_id": "sg-0a37c48e2b083edab",
+  "internet_updates_sg_id": "sg-07b915e6ae4a4e7b5",
+  "nat_instance_sg_id": "sg-0822be1a699d0fc51",
+  "private_sg_id": "sg-0e2114133de52ec90",
+  "private_subnet_id": "subnet-0f7336d45802dd2af",
+  "prometheus_sg_id": "sg-0db5ef7a4691cd723",
+  "public_subnet_id": "subnet-0e5b3677346f14702",
+  "rsync_updates_sg_id": "sg-000b83acd3b6a7e36",
+  "vpc_id": "vpc-028be1c0c5ce37852"
+}

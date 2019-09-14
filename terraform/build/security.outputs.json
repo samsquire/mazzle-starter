@@ -1,0 +1,5 @@
+{
+  "bastion_sg_id": "sg-0ed3ff9d95bc8ebb1",
+  "need_secrets_sg_id": "sg-0c108168dff8a4cab",
+  "vault_sg_id": "sg-058db01109fc2add6"
+}

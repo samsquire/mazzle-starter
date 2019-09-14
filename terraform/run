@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "Terraform run" >&2
-
 ENV=$1
 
 if [ -z $ENV ] ; then
@@ -23,8 +21,10 @@ source ~/.aws/env
 set +a
 export HOME=/home/$(whoami)
 COMMON=$(readlink -f common.tfvars)
-./t $ENV $COMPONENT apply -var-file $COMMON >&2
+echo "Running version"
+./t $ENV $COMPONENT version -var-file $COMMON
+echo "Running apply"
+./t $ENV $COMPONENT apply -var-file $COMMON
 exit_code=$?
-./t $ENV $COMPONENT output | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r
+./t $ENV $COMPONENT output
 exit $exit_code
-

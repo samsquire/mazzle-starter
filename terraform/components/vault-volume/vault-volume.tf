@@ -8,20 +8,20 @@ data "terraform_remote_state" "vpc" {
 }
 
 data "aws_subnet" "private" {
-  id = "${data.terraform_remote_state.vpc.private_subnet_id}"
+  id = data.terraform_remote_state.vpc.outputs.private_subnet_id
 }
 
 resource "aws_ebs_volume" "vault" {
   type = "gp2"
-  tags {
-    Environment = "${var.vvv_env}"
-    Name = "vault"
+  tags = {
+    Environment = var.vvv_env
+    Name        = "vault"
   }
-  size = 1
-  availability_zone = "${data.aws_subnet.private.availability_zone}" 
+  size              = 1
+  availability_zone = data.aws_subnet.private.availability_zone
 }
 
 output "vault_volume_id" {
-  value = "${aws_ebs_volume.vault.id}"
+  value = aws_ebs_volume.vault.id
 }
 
