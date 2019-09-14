@@ -3,8 +3,8 @@
 - hosts: all
   become: yes
   vars:
-    network_rail_username: sam@samsquire.com 
-    network_rail_password: ***REMOVED***
+    network_rail_username:
+    network_rail_password:
     neo4j_password: newpassword 
   tasks:
   - apt_repository:
