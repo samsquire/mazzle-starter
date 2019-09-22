@@ -1,0 +1,30 @@
+#!/bin/bash
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+set -a
+source ~/.aws/env
+set +a
+export HOME=/home/$(whoami)
+COMMON=$(readlink -f common.tfvars)
+
+echo "Running validate"
+./t $ENV $COMPONENT validate -var-file $COMMON
+exit_code=$?
+echo ${exit_code} > ${EXIT_CODE_PATH}
+echo "{}" > ${OUTPUT_PATH}
+exit $exit_code
