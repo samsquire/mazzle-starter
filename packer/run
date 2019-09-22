@@ -24,9 +24,16 @@ logfile=logs/$COMPONENT-$BUILD_NUMBER.log
 shasum=$(shasum < $COMPONENT.json)
 packer build --var "component=$COMPONENT" --var "environment=$ENVIRONMENT" --var "build_number=$BUILD_NUMBER" -machine-readable $COMPONENT.json | tee $logfile >&2
 result=$?
+
+echo ${result} > ${EXIT_CODE_PATH}
+
 source_ami=$(grep 'artifact,0,id' $logfile | cut -d, -f6 | cut -d: -f2)
 
 output_name=${COMPONENT/-/_}
 
-echo "{\"${output_name}_source_ami\": \"$source_ami\"}" > build/${COMPONENT}.outputs.json
+if [ -z "${source_ami}" ] ; then
+  exit 1
+fi
+
+echo "{\"${output_name}_source_ami\": \"$source_ami\"}" > ${OUTPUT_PATH}
 exit $result

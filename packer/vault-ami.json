@@ -12,7 +12,7 @@
       "type": "amazon-ebs",
       "region": "eu-west-2",
       "associate_public_ip_address": true,
-      "instance_type": "t2.micro",
+      "instance_type": "t2.nano",
       "ssh_username": "ubuntu",
       "profile": "default",
       "ami_name": "{{ user `component` }}_{{ user `build_number` }}",

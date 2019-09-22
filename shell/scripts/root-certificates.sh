@@ -7,9 +7,9 @@ bastion_ip = os.environ["bastion_public"]
 vault_ip = os.environ["vault_private_ip"]
 args = ["ssh",
   "-o",
-  "StrictHostKeyChecking=no"
+  "StrictHostKeyChecking=no",
   "-o",
-  "ProxyCommand ssh -W %h:%p -i ~/.ssh/vvv-sam-n550jv ubuntu@{}".format(bastion_ip),
+  "ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p -i ~/.ssh/vvv-sam-n550jv ubuntu@{}".format(bastion_ip),
   "ubuntu@{}".format(vault_ip),
   "-i",
   "~/.ssh/vvv-sam-n550jv",

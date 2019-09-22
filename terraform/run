@@ -26,5 +26,6 @@ echo "Running version"
 echo "Running apply"
 ./t $ENV $COMPONENT apply -var-file $COMMON
 exit_code=$?
+echo ${exit_code} > ${EXIT_CODE_PATH}
 ./t $ENV $COMPONENT output
 exit $exit_code

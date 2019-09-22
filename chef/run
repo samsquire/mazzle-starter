@@ -9,7 +9,6 @@ fi
 shift
 
 COMPONENT=$1
-echo $COMPONENT >&2
 
 if [ -z $COMPONENT ] ; then
   echo "need to provide component name"
@@ -18,7 +17,7 @@ fi
 shift
 
 
-echo "{}" > build/${COMPONENT}.outputs.json
+echo "{}" > ${OUTPUT_PATH}
 
 exit 0
 export PATH=/usr/bin/:$PATH

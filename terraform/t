@@ -52,7 +52,7 @@ taint)
   terraform $TF_COMMAND "$@"
 ;;
 output)
-  terraform $TF_COMMAND -json "$@" | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r > ../../build/${COMPONENT}.outputs.json
+  terraform $TF_COMMAND -json "$@" | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r > ${OUTPUT_PATH}
 ;;
 destroy)
   initialize
