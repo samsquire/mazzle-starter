@@ -21,6 +21,7 @@ resource "aws_route53_zone" "subenvironment" {
   }
 }
 
+
 output "subenvironment_zone_id" {
   value = aws_route53_zone.subenvironment.zone_id
 }

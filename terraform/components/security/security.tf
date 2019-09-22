@@ -88,7 +88,7 @@ resource "aws_security_group_rule" "infrastructure_from_bastion_ssh" {
 resource "aws_security_group_rule" "bastion_from_me_ssh" {
   protocol          = "tcp"
   security_group_id = aws_security_group.bastion.id
-  cidr_blocks       = ["${var.me}/32"]
+  cidr_blocks       = ["${var.me}"]
   from_port         = 22
   to_port           = 22
   type              = "ingress"
@@ -219,4 +219,3 @@ resource "aws_security_group_rule" "prometheus_to_infrastructure" {
   from_port                = 9100
   to_port                  = 9100
 }
-

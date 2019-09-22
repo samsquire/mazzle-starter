@@ -100,4 +100,3 @@ resource "aws_security_group_rule" "to_nat_instance_https" {
   to_port                  = "443"
   type                     = "egress"
 }
-

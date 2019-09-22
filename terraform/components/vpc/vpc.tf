@@ -223,7 +223,7 @@ resource "aws_security_group_rule" "from_me" {
   protocol          = "tcp"
   from_port         = "22"
   to_port           = "22"
-  cidr_blocks       = ["${var.me}/32"]
+  cidr_blocks       = ["${var.me}"]
 }
 
 resource "aws_security_group_rule" "from_home" {
