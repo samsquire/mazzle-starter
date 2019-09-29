@@ -10,13 +10,16 @@ mkdir -p ${mount_point}
 chattr +i ${mount_point}
 counter=0
 
+function attach {
 aws ec2 attach-volume --volume-id $volume_id --instance-id $instance_id --device ${device_name} --region eu-west-2
+}
 
 while [ ! -e ${device_name} ] ; do
   echo "${device_name} does not exist yet, sleeping..."
   sleep 30
   counter=$((counter + 1))
   if [ $counter -ge 20 ] ; then
+    attach
     echo "could not attach volume"
     sudo shutdown -h now
     exit 1

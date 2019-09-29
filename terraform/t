@@ -36,7 +36,9 @@ function initialize() {
  terraform init --reconfigure -backend=true \
    -backend-config=bucket=vvv-$ENV-state\
    -backend-config=key=$COMPONENT/terraform.tfstate \
-   -backend-config=region=eu-west-2
+   -backend-config=region=eu-west-2 \
+   -get-plugins=true \
+   -plugin-dir=~/.terraform/plugins
 }
 
 case $TF_COMMAND in
@@ -66,6 +68,7 @@ state)
   terraform $TF_COMMAND "$@"
 ;;
 validate)
+  initialize
   terraform $TF_COMMAND -var vvv_env=$ENV "$@"
 ;;
 console)

@@ -21,12 +21,6 @@ pwd
 set -a
 source ~/.aws/env
 set +a
-export HOME=/home/$(whoami)
-COMMON=$(readlink -f common.tfvars)
 
-echo "Running apply"
-./t $ENV $COMPONENT apply -var-file $COMMON
-exit_code=$?
-echo ${exit_code} > ${EXIT_CODE_PATH}
-./t $ENV $COMPONENT output
-exit $exit_code
+echo 0 > ${EXIT_CODE_PATH}
+echo "{}" > ${OUTPUT_PATH}

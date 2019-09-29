@@ -1,0 +1,56 @@
+- name: install unzip
+  package:
+    name: unzip
+    state: present
+
+- name: install jq
+  package:
+    name: jq
+    state: present
+
+- name: Download terraform
+  get_url:
+    url: https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
+    dest: /tmp/terraform_0.12.9_linux_amd64.zip
+    mode: '0440'
+
+- name: Extract terraform
+  unarchive:
+    src: /tmp/terraform_0.12.9_linux_amd64.zip
+    remote_src: yes
+    dest: /usr/local/bin
+
+- name: Ensure ~/.aws dir
+  file:
+    path: "/home/{{ ansible_user }}/.aws"
+    state: directory
+
+- name: Provision AWS secrets
+  copy:
+    src: ~/.aws/env
+    dest: "/home/{{ ansible_user }}/.aws/env"
+
+- name: Provision AWS credentials
+  copy:
+    src: ~/.aws/credentials
+    dest: "/home/{{ ansible_user }}/.aws/credentials"
+
+- name: Provision AWS config
+  copy:
+    src: ~/.aws/config
+    dest: "/home/{{ ansible_user }}/.aws/config"
+
+- file:
+    path: /etc/localtime
+    state: absent
+
+- name: fix timezone
+  shell: ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+
+- name: update time
+  shell: "timedatectl set-ntp off ; timedatectl set-ntp on"
+
+- name: terraform plugin directory
+  file:
+    path: /home/{{ ansible_user }}/.terraform.d/plugins
+    state: directory

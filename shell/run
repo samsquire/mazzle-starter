@@ -23,5 +23,6 @@ echo $bastion_public >&2.
 . ../venv/bin/activate >&2.
 env ./scripts/$COMPONENT.sh $ENV > ${OUTPUT_PATH}
 result=$?
+echo ${result} > ${EXIT_CODE_PATH}
 
 exit $result

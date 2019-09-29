@@ -1,0 +1,26 @@
+- name: ssh access
+  ec2_group:
+    name: box
+    description: sg with rule descriptions
+    vpc_id: "{{ vpc }}"
+    region: eu-west-2
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ me }}"
+
+- name: Provision a set of instances
+  ec2:
+     key_name: "vvv-sam-n550jv"
+     group: box
+     instance_type: t2.nano
+     image: "{{ ami_id }}"
+     region: "{{ region }}"
+     wait: true
+     exact_count: 1
+     count_tag:
+        Name: Demo
+     instance_tags:
+        Name: Demo
+  register: ec2

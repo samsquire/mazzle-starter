@@ -1,7 +1,9 @@
 digraph G {
   label="pipeline";
+  rankdir=LR;
 
 /* List your components */
+"@ansible/worker-provision";
 "terraform/buckets";
 "chef/ubuntu_java";
 "packer/source-ami*";
@@ -29,8 +31,9 @@ digraph G {
 /* "terraform/elasticsearch"; */
 
 /* List dependencies */
+"@ansible/worker-provision" -> "terraform/buckets"
 "packer/source-ami*" -> "terraform/bastion";
-
+"terraform/vpc" -> "terraform/vault";
 
 "terraform/vpc" -> "terraform/dns";
  "terraform/vault" -> "terraform/private";

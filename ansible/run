@@ -9,6 +9,7 @@ fi
 shift
 
 COMPONENT=$1
+echo $COMPONENT >&2
 
 if [ -z $COMPONENT ] ; then
   echo "need to provide component name"
@@ -16,17 +17,10 @@ if [ -z $COMPONENT ] ; then
 fi
 shift
 
-pwd
-
+pushd playbooks/${COMPONENT}
 set -a
 source ~/.aws/env
 set +a
-export HOME=/home/$(whoami)
-COMMON=$(readlink -f common.tfvars)
-
-echo "Running apply"
-./t $ENV $COMPONENT apply -var-file $COMMON
-exit_code=$?
-echo ${exit_code} > ${EXIT_CODE_PATH}
-./t $ENV $COMPONENT output
-exit $exit_code
+ansible-playbook -i inventory ${COMPONENT}.playbook.yml --user vagrant
+echo $? > ${EXIT_CODE_PATH}
+echo "{}" > ${OUTPUT_PATH}

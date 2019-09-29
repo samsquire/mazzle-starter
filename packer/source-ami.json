@@ -42,7 +42,7 @@
 
     {
       "type": "shell",
-      "script": "../terraform/templates/node_exporter_bootstrap.sh" ,
+      "script": "scripts/node_exporter_bootstrap.sh" ,
       "environment_vars": ["mirror_url={{ user `mirror_url` }}"]
     }
 

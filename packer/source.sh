@@ -2,8 +2,8 @@
 
 # sudo sed -i 's@deb http://eu-west-2.ec2.archive.ubuntu.com/ubuntu/@deb http://${mirror_url}/ubuntu@g' /etc/apt/sources.list
 sudo add-apt-repository universe
+sudo add-apt-repository multiverse
 sudo apt-get update
-sleep 10
 sudo apt-get upgrade -y
 sudo apt install -y unzip
 sudo apt install -y zip

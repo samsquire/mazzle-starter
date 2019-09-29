@@ -1,0 +1,4 @@
+ami_id:  ami-068a81fe63a7fcdc7
+region: eu-west-2
+vpc: vpc-2fba2646
+me: 92.40.248.191/32

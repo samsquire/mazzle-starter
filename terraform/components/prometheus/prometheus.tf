@@ -33,7 +33,7 @@ data "template_file" "bootstrap" {
 }
 
 data "template_file" "node_exporter_bootstrap" {
-  template = file("${path.module}/../../templates/node_exporter_bootstrap.sh")
+  template = file("${path.module}/templates/node_exporter_bootstrap.sh")
   vars     = {}
 }
 
