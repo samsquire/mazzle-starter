@@ -13,15 +13,15 @@ This is an experimental infrastructure to demonstrate the tool [devops-pipeline]
 
 # Notes
 
- * Instances have a volume service which mount volumes using the instance tags -- rather than using Terraform. 
+ * Instances have a volume service which mount volumes using the instance tags -- rather than using Terraform.
 
 # Todo
 
-* Centralised logging 
+* Centralised logging
 * Put Prometheus on its own box
 * Audit
 
-# Expanded pipeline
+# Expanded lifecycle pipeline
 
 
 ![ExpandedPipeline](architecture.expanded.png)

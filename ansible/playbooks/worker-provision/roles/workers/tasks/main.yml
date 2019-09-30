@@ -20,6 +20,18 @@
     remote_src: yes
     dest: /usr/local/bin
 
+- name: Download packer
+  get_url:
+    url: https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_linux_amd64.zip
+    dest: /tmp/packer_1.4.3_linux_amd64.zip
+    mode: '0440'
+
+- name: Extract packer
+  unarchive:
+    src: /tmp/packer_1.4.3_linux_amd64.zip
+    remote_src: yes
+    dest: /usr/local/bin
+
 - name: Ensure ~/.aws dir
   file:
     path: "/home/{{ ansible_user }}/.aws"

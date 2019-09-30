@@ -12,8 +12,12 @@ digraph G {
 "terraform/users";
 "terraform/bastion";
  "terraform/private";
+
+ /*
 "terraform/repository";
 "terraform/repository-volume";
+*/
+
 "packer/vault-ami*";
 "terraform/vault";
 "terraform/security";
@@ -21,12 +25,19 @@ digraph G {
 "terraform/dns";
 "shell/root-certificates";
 "packer/authenticated-ami*";
+
+/*
 "terraform/vpc" -> "terraform/repository-volume";
 "terraform/repository-volume" -> "terraform/repository";
-"packer/source-ami*" -> "terraform/prometheus";
-"terraform/vpc" -> "terraform/prometheus";
+*/
+/*
 "terraform/repository" -> "terraform/bastion";
 "terraform/vpc" -> "terraform/repository";
+*/
+
+"packer/source-ami*" -> "terraform/prometheus";
+"terraform/vpc" -> "terraform/prometheus";
+
 
 /* "terraform/elasticsearch"; */
 

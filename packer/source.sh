@@ -5,12 +5,12 @@ sudo add-apt-repository universe
 sudo add-apt-repository multiverse
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt install -y unzip
-sudo apt install -y zip
+sudo apt-get install -y unzip
+sudo apt-get install -y zip
 sudo apt-get install -y python3
 sudo apt-get install -y python2.7
-sudo apt install -y jq
-sudo apt install -y awscli
+sudo apt-get install -y jq
+sudo apt-get install -y awscli
 
 pushd /tmp
 
