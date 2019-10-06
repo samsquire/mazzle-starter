@@ -36,10 +36,6 @@ data "terraform_remote_state" "repository" {
 
 data "template_file" "bootstrap" {
   template = file("${path.module}/templates/bootstrap.sh")
-
-  vars = {
-    mirror_url = data.terraform_remote_state.repository.outputs.mirror_url
-  }
 }
 
 data "template_cloudinit_config" "cloudinit" {
@@ -73,4 +69,3 @@ resource "aws_instance" "private" {
 output "private_instance_ip_address" {
   value = aws_instance.private.private_ip
 }
-

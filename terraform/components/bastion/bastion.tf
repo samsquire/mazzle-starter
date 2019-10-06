@@ -27,9 +27,7 @@ data "terraform_remote_state" "dns" {
 
 data "template_file" "bootstrap" {
   template = file("${path.module}/templates/bootstrap.sh")
-  vars = {
-    mirror_url = data.terraform_remote_state.repository.outputs.mirror_url
-  }
+
 }
 
 data "template_cloudinit_config" "cloudinit" {

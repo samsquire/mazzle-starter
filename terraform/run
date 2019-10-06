@@ -24,6 +24,8 @@ set +a
 export HOME=/home/$(whoami)
 COMMON=$(readlink -f common.tfvars)
 
+which terraform
+./t $ENV $COMPONENT version
 echo "Running apply"
 ./t $ENV $COMPONENT apply -var-file $COMMON
 exit_code=$?

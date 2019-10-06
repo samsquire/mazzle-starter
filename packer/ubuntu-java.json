@@ -29,8 +29,9 @@
   "provisioners": [
   {
    "type": "chef-solo",
-   "cookbook_paths": ["../chef/applications", "../chef/applications/ubuntu_java/berks-cookbooks"],
-   "run_list": "recipe[ubuntu_java]" 
+   "cookbook_paths": ["chef/applications", "chef/applications/ubuntu_java/berks-cookbooks"],
+   "run_list": "recipe[ubuntu_java]",
+   "chef_license": "accept"
   }
 ]
 

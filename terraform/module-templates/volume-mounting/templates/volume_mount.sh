@@ -20,9 +20,7 @@ while [ ! -e ${device_name} ] ; do
   counter=$((counter + 1))
   if [ $counter -ge 20 ] ; then
     attach
-    echo "could not attach volume"
-    sudo shutdown -h now
-    exit 1
+    counter=0
   fi
 done
 blkid ${device_name} | grep ext4
