@@ -28,6 +28,12 @@ ARGS=
 
 COMPONENT_PATH=components/$COMPONENT
 
+if [ -f /snap/bin/jq ] ; then
+ JQ=/snap/bin/jq
+ else
+ JQ=jq
+fi
+echo "Using ${JQ}"
 
 pushd $COMPONENT_PATH >&2
 rm -rf .state
@@ -53,7 +59,7 @@ taint)
   terraform $TF_COMMAND "$@"
 ;;
 output)
-  terraform $TF_COMMAND -json "$@" | jq 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r > ${OUTPUT_PATH}
+  terraform $TF_COMMAND -json "$@" | ${JQ} 'to_entries | map({key: .key, value: .value.value}) | from_entries' -r > ${OUTPUT_PATH}
 ;;
 destroy)
   initialize

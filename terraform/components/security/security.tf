@@ -18,6 +18,11 @@ resource "aws_security_group" "vault" {
   }
 }
 
+data "aws_security_group" "ci_worker" {
+    name = "box"
+    vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+}
+
 resource "aws_security_group_rule" "needs_secrets_to_vault" {
   protocol                 = "tcp"
   from_port                = 8200
@@ -25,6 +30,16 @@ resource "aws_security_group_rule" "needs_secrets_to_vault" {
   type                     = "egress"
   security_group_id        = aws_security_group.needs_secrets.id
   source_security_group_id = aws_security_group.vault.id
+}
+
+
+resource "aws_security_group_rule" "ci_worker_to_infrastructure" {
+  protocol                 = "tcp"
+  from_port                = 22
+  to_port                  = 22
+  type                     = "ingress"
+  security_group_id        = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  source_security_group_id = data.aws_security_group.ci_worker.id
 }
 
 resource "aws_security_group_rule" "vault_from_needs_secrets" {

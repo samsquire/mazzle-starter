@@ -9,6 +9,11 @@
         from_port: 22
         to_port: 22
         cidr_ip: "{{ me }}"
+    rules_egress:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          group_id: sg-0cdaf37e873bc998e
 
 - name: Provision a set of instances
   ec2:
@@ -18,9 +23,24 @@
      image: "{{ ami_id }}"
      region: "{{ region }}"
      wait: true
-     exact_count: 1
+     exact_count: 2
      count_tag:
-        Name: Demo
+        Name: worker
      instance_tags:
-        Name: Demo
+        Name: worker
   register: ec2
+
+- ec2_instance_facts:
+    filters:
+      "tag:Name": worker
+  register: facts
+  
+- name: write instance infos
+  debug:
+    msg: "{{ facts | json_query('instances[*].public_dns_name') }}"
+    
+- local_action:
+    module: copy
+    content: "{\"workers\": {{ facts | json_query('instances[*].public_dns_name') }}
+    }"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"

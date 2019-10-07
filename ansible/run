@@ -21,6 +21,5 @@ pushd playbooks/${COMPONENT}
 set -a
 source ~/.aws/env
 set +a
-ansible-playbook -i inventory ${COMPONENT}.playbook.yml --user vagrant
+ansible-playbook -i from_env.py ${COMPONENT}.playbook.yml --user ubuntu
 echo $? > ${EXIT_CODE_PATH}
-echo "{}" > ${OUTPUT_PATH}

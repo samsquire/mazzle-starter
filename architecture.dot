@@ -3,6 +3,7 @@ digraph G {
   rankdir=LR;
 
 /* List your components */
+"@ansible/machines";
 "@ansible/worker-provision";
 "terraform/buckets";
 "chef/ubuntu_java";
@@ -42,6 +43,7 @@ digraph G {
 /* "terraform/elasticsearch"; */
 
 /* List dependencies */
+"@ansible/machines" -> "@ansible/worker-provision"
 "@ansible/worker-provision" -> "terraform/buckets"
 "packer/source-ami*" -> "terraform/bastion";
 "terraform/vpc" -> "terraform/vault";

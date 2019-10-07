@@ -4,7 +4,7 @@
     state: present
 
 - name: install jq
-  package:
+  snap:
     name: jq
     state: present
 
