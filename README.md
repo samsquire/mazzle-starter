@@ -1,4 +1,4 @@
-# fun infra
+# devops-pipeline-starter
 
 This is an experimental infrastructure to demonstrate the tool [devops-pipeline](https://github.com/samsquire/devops-pipeline).
 
