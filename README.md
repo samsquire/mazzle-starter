@@ -1,6 +1,6 @@
 # devops-pipeline-starter
 
-This is an experimental infrastructure to demonstrate the tool [devops-pipeline](https://github.com/samsquire/devops-pipeline).
+This project provisions a real life test infrastructure using [devops-pipeline](https://github.com/samsquire/devops-pipeline).
 
 ![Pipeline](architecture.png)
 
@@ -14,12 +14,6 @@ This is an experimental infrastructure to demonstrate the tool [devops-pipeline]
 # Notes
 
  * Instances have a volume service which mount volumes using the instance tags -- rather than using Terraform.
-
-# Todo
-
-* Centralised logging
-* Put Prometheus on its own box
-* Audit
 
 # Expanded lifecycle pipeline
 
