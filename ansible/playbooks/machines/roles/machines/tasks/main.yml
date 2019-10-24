@@ -1,8 +1,9 @@
+
 - name: ssh access
   ec2_group:
     name: box
     description: sg with rule descriptions
-    vpc_id: "{{ vpc }}"
+    vpc_id: "{{ lookup('env', 'vpc_id') }}"
     region: eu-west-2
     rules:
       - proto: tcp
@@ -13,7 +14,7 @@
         - proto: tcp
           from_port: 22
           to_port: 22
-          group_id: sg-0cdaf37e873bc998e
+          group_id: "{{ lookup('env', 'infrastructure_sg_id') }}"
 
 - name: Provision a set of instances
   ec2:
@@ -34,11 +35,11 @@
     filters:
       "tag:Name": worker
   register: facts
-  
+
 - name: write instance infos
   debug:
     msg: "{{ facts | json_query('instances[*].public_dns_name') }}"
-    
+
 - local_action:
     module: copy
     content: "{\"workers\": {{ facts | json_query('instances[*].public_dns_name') }}

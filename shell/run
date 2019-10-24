@@ -19,7 +19,6 @@ shift
 
 env >&2.
 
-echo $bastion_public >&2.
 . ../venv/bin/activate >&2.
 env ./scripts/$COMPONENT.sh $ENV > ${OUTPUT_PATH}
 result=$?

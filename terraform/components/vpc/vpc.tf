@@ -7,6 +7,10 @@ output "vpc_id" {
   value = "${aws_vpc.vpc.id}"
 }
 
+output "me" {
+  value = var.me
+}
+
 resource "aws_subnet" "public" {
   vpc_id     = "${aws_vpc.vpc.id}"
   cidr_block = "10.0.0.0/25"
