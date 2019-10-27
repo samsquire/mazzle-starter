@@ -11,9 +11,12 @@ chattr +i ${mount_point}
 counter=0
 
 function attach {
-aws ec2 attach-volume --volume-id $volume_id --instance-id $instance_id --device ${device_name} --region eu-west-2
+command="aws ec2 attach-volume --volume-id $volume_id --instance-id $instance_id --device ${device_name} --region eu-west-2"
+echo $${command}
+$${command}
 }
 
+attach
 while [ ! -e ${device_name} ] ; do
   echo "${device_name} does not exist yet, sleeping..."
   sleep 30

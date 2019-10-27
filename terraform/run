@@ -24,6 +24,13 @@ set +a
 export HOME=/home/$(whoami)
 COMMON=$(readlink -f common.tfvars)
 
+if [ -f inputs/${COMPONENT} ] ; then
+  while read line ; do
+    echo "Passing ${line} to Terraform"
+    export TF_VAR_${line}=${!line}
+  done < inputs/${COMPONENT}
+fi
+
 which terraform
 ./t $ENV $COMPONENT version
 echo "Running apply"

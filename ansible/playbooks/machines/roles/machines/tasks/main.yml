@@ -1,5 +1,6 @@
 
 - name: ssh access
+  register: sg
   ec2_group:
     name: box
     description: sg with rule descriptions
@@ -9,24 +10,44 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: "{{ me }}"
+        cidr_ip: "{{ lookup('env', 'me') }}"
+        rule_desc: "me to workers"
     rules_egress:
         - proto: tcp
           from_port: 22
           to_port: 22
           group_id: "{{ lookup('env', 'infrastructure_sg_id') }}"
+          rule_desc: "workers to infra"
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: "0.0.0.0/0"
+          rule_desc: "web updates"
+        - proto: tcp
+          from_port: 443
+          to_port: 443
+          cidr_ip: "0.0.0.0/0"
+          rule_desc: "web tls updates"
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: "0.0.0.0/0"
+          rule_desc: "ssh out"
+    tags:
+      Name: box
 
 - name: Provision a set of instances
   ec2:
      key_name: "vvv-sam-n550jv"
      group: box
+     vpc_subnet_id: " {{ lookup('env', 'public_subnet_id') }}"
      instance_type: t2.nano
      image: "{{ ami_id }}"
      region: "{{ region }}"
      wait: true
      exact_count: 2
      count_tag:
-        Name: worker
+       Name: worker
      instance_tags:
         Name: worker
   register: ec2
@@ -34,6 +55,7 @@
 - ec2_instance_facts:
     filters:
       "tag:Name": worker
+      "instance-state-name": running
   register: facts
 
 - name: write instance infos

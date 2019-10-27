@@ -41,8 +41,6 @@ digraph G {
 
 "terraform/vault-volume" -> "terraform/vault";
 
-"packer/source-ami*" -> "packer/vault-ami*";
-
  "terraform/dns" -> "terraform/private";
  "terraform/dns" -> "terraform/vault";
 
@@ -70,8 +68,10 @@ digraph G {
 
 "packer/source-ami*" -> "packer/authenticated-ami*";
 "packer/authenticated-ami*" -> "packer/ubuntu-java*";
-
+"packer/authenticatd-ami" -> "@shell/init-vault";
 "@shell/root-certificates" -> "@shell/init-vault";
+
+"terraform/vault" -> "@shell/init-vault";
 
  "terraform/dns" -> "terraform/prometheus";
  "packer/source-ami*" -> "terraform/prometheus";
