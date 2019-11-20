@@ -11,6 +11,10 @@ output "me" {
   value = var.me
 }
 
+output "key_name" {
+  value = var.key_name
+}
+
 resource "aws_subnet" "public" {
   vpc_id     = "${aws_vpc.vpc.id}"
   cidr_block = "10.0.0.0/25"

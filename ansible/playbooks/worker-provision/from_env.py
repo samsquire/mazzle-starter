@@ -18,10 +18,10 @@ if args.list:
         }
     }
     print(json.dumps(data, indent=True, sort_keys=True))
-        
-        
+
+
 if args.host:
     data = {
-        "ansible_ssh_private_key_file": "/home/sam/.ssh/vvv-sam-n550jv"
+        "ansible_ssh_private_key_file": "/home/sam/.ssh/{}".format(os.environ["key_name"])
     }
     print(json.dumps(data, indent=True, sort_keys=True))

@@ -83,6 +83,7 @@ data "template_file" "bootstrap" {
   template = file("${path.module}/templates/01-bootstrap.sh")
   vars = {
     vvv_env = var.vvv_env
+    domain = var.domain
   }
 }
 
@@ -139,4 +140,3 @@ resource "aws_instance" "vault" {
 output "vault_private_ip" {
   value = aws_instance.vault.private_ip
 }
-

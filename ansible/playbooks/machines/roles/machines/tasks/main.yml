@@ -41,15 +41,15 @@
      key_name: "vvv-sam-n550jv"
      group: box
      vpc_subnet_id: " {{ lookup('env', 'public_subnet_id') }}"
-     instance_type: t2.nano
+     instance_type: t2.micro
      image: "{{ ami_id }}"
      region: "{{ region }}"
      wait: true
      exact_count: 2
-     count_tag:
-       Name: worker
+     count_tag: worker
      instance_tags:
         Name: worker
+        worker: yes
   register: ec2
 
 - ec2_instance_facts:

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 vvv_env=$1
+domain=$2
 
 cat << EOF | sudo tee /srv/vault.hcl > /dev/null
 storage "file" {
@@ -8,8 +9,8 @@ storage "file" {
 }
 listener "tcp" {
  address = "0.0.0.0:8200"
- tls_cert_file = "/data/vault/ca/vault.${vvv_env}.devops-pipeline.com.crt"
- tls_key_file = "/data/vault/ca/vault.${vvv_env}.devops-pipeline.com.privkey.pem"
+ tls_cert_file = "/data/vault/ca/vault.${vvv_env}.${domain}.crt"
+ tls_key_file = "/data/vault/ca/vault.${vvv_env}.${domain}.privkey.pem"
 }
 EOF
 

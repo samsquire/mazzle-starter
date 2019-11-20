@@ -14,9 +14,9 @@ if [ ! -d "$ca_dir" ] ; then
   echo "Certificate directory does not exist, creating root ca"
   mkdir -p $ca_dir/certs
   cd $ca_dir
-  sudo /srv/create_root_ca.sh
+  sudo /srv/create_root_ca.sh ${vvv_env} ${domain}
   echo "Creating certificate for vault server"
-  sudo /srv/create_certificate.sh vault.${vvv_env}.devops-pipeline.com
+  sudo /srv/create_certificate.sh vault.${vvv_env}.${domain}
 fi
 
 sudo systemctl enable vault.service

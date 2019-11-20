@@ -32,7 +32,7 @@ set +a
 export HOME=/home/$USER
 
 for worker in ${workers} ; do
-  command="inspec exec tests/${COMPONENT} --chef-license accept -t ssh://ubuntu@${worker} --key-files ~/.ssh/vvv-sam-n550jv"
+  command="inspec exec tests/${COMPONENT} --chef-license accept -t ssh://ubuntu@${worker} --key-files ~/.ssh/${key_name}"
   echo $command
   ${command}
   exit_code=$?

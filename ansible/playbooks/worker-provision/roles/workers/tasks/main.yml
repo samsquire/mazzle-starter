@@ -1,3 +1,12 @@
+- name: copy java
+  copy:
+    src: ~/Downloads/jdk-11.0.5_linux-x64_bin.deb
+    dest: /tmp/jdk-11.0.5_linux-x64_bin.deb
+
+- name: install java
+  apt:
+    deb: /tmp/jdk-11.0.5_linux-x64_bin.deb
+
 - name: install unzip
   package:
     name: unzip
@@ -31,6 +40,24 @@
     src: /tmp/packer_1.4.3_linux_amd64.zip
     remote_src: yes
     dest: /usr/local/bin
+
+- name: Download gradle
+  get_url:
+    url: https://services.gradle.org/distributions/gradle-5.6.3-bin.zip
+    dest: /tmp/gradle-5.6.3-bin.zip
+    mode: '0440'
+
+- name: Extract gradle
+  unarchive:
+    src: /tmp/gradle-5.6.3-bin.zip
+    remote_src: yes
+    dest: /usr/local/
+
+- name: Extract gradle
+  shell: cp -r /usr/local/gradle-5.6.3/bin/* /usr/local/bin
+
+- name: Extract gradle libs
+  shell: cp -r /usr/local/gradle-5.6.3/lib/* /usr/local/lib
 
 - name: Ensure ~/.aws dir
   file:

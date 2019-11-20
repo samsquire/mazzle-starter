@@ -1,2 +1,3 @@
 key_name="vvv-sam-n550jv"
-me="188.29.164.84/32"
+me="94.197.121.20/32"
+domain="devops-pipeline.com"
