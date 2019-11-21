@@ -2,3 +2,4 @@
   become: yes
   roles:
   - workers
+  - aws

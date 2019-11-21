@@ -1,0 +1,20 @@
+
+- name: Ensure ~/.aws dir
+  file:
+    path: "/home/{{ ansible_user }}/.aws"
+    state: directory
+
+- name: Provision AWS secrets
+  copy:
+    src: ~/.aws/env
+    dest: "/home/{{ ansible_user }}/.aws/env"
+
+- name: Provision AWS credentials
+  copy:
+    src: ~/.aws/credentials
+    dest: "/home/{{ ansible_user }}/.aws/credentials"
+
+- name: Provision AWS config
+  copy:
+    src: ~/.aws/config
+    dest: "/home/{{ ansible_user }}/.aws/config"

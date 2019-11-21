@@ -1,11 +1,12 @@
-- name: copy java
-  copy:
-    src: ~/Downloads/jdk-11.0.5_linux-x64_bin.deb
-    dest: /tmp/jdk-11.0.5_linux-x64_bin.deb
-
 - name: install java
-  apt:
-    deb: /tmp/jdk-11.0.5_linux-x64_bin.deb
+  package:
+    name: openjdk-11-jdk
+    state: present
+
+- name: install snapd
+  package:
+    name: snapd
+    state: present
 
 - name: install unzip
   package:
@@ -59,26 +60,6 @@
 - name: Extract gradle libs
   shell: cp -r /usr/local/gradle-5.6.3/lib/* /usr/local/lib
 
-- name: Ensure ~/.aws dir
-  file:
-    path: "/home/{{ ansible_user }}/.aws"
-    state: directory
-
-- name: Provision AWS secrets
-  copy:
-    src: ~/.aws/env
-    dest: "/home/{{ ansible_user }}/.aws/env"
-
-- name: Provision AWS credentials
-  copy:
-    src: ~/.aws/credentials
-    dest: "/home/{{ ansible_user }}/.aws/credentials"
-
-- name: Provision AWS config
-  copy:
-    src: ~/.aws/config
-    dest: "/home/{{ ansible_user }}/.aws/config"
-
 - file:
     path: /etc/localtime
     state: absent
@@ -100,3 +81,8 @@
 - name: install inspec
   apt:
     deb: https://packages.chef.io/files/stable/inspec/4.18.0/ubuntu/18.04/inspec_4.18.0-1_amd64.deb
+
+- local_action:
+    module: copy
+    content: "{}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
