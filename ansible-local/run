@@ -1,0 +1,26 @@
+#!/bin/bash
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+echo $COMPONENT >&2
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+pushd playbooks/${COMPONENT}
+set -a
+source ~/.aws/env
+set +a
+ansible-playbook -i localhost, -c local ${COMPONENT}.playbook.yml --user ubuntu
+echo $? > ${EXIT_CODE_PATH}
+echo "{}" > ${OUTPUT_PATH}
