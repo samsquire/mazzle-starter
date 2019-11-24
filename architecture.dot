@@ -35,7 +35,7 @@ digraph G {
 
 "packer/vault-ami*" -> "terraform/vault"
 
-"@terraform/vpc" -> "@ansible/machines" -> "@ansible/worker-provision"
+"@terraform/vpc" -> "@ansible/machines*" -> "@ansible/worker-provision"
 
 "terraform/vault" -> "terraform/private";
 

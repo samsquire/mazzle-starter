@@ -52,7 +52,7 @@
         worker: yes
   register: ec2
 
-- ec2_instance_facts:
+- ec2_instance_info:
     filters:
       "tag:Name": worker
       "instance-state-name": running

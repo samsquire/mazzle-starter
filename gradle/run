@@ -19,7 +19,7 @@ shift
 
 pushd ${COMPONENT}
 
-gradle build
+gradle build run
 exit_code=$?
 
 echo ${exit_code} > ${EXIT_CODE_PATH}

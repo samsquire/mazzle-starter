@@ -6,4 +6,4 @@ variable "key_name" {
 
 variable "me" {
 }
-
+variable "domain" {}

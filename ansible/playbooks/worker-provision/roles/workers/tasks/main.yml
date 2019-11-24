@@ -1,3 +1,7 @@
+- name: update apt
+  apt:
+    update_cache: yes
+
 - name: install java
   package:
     name: openjdk-11-jdk
@@ -23,6 +27,7 @@
     url: https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
     dest: /tmp/terraform_0.12.9_linux_amd64.zip
     mode: '0440'
+    checksum: sha256:69712c6216cc09b7eca514b9fb137d4b1fead76559c66f338b4185e1c347ace5
 
 - name: Extract terraform
   unarchive:
@@ -35,6 +40,7 @@
     url: https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_linux_amd64.zip
     dest: /tmp/packer_1.4.3_linux_amd64.zip
     mode: '0440'
+    checksum: sha256:c89367c7ccb50ca3fa10129bbbe89273fba0fa6a75b44e07692a32f92b1cbf55
 
 - name: Extract packer
   unarchive:
@@ -44,21 +50,23 @@
 
 - name: Download gradle
   get_url:
-    url: https://services.gradle.org/distributions/gradle-5.6.3-bin.zip
-    dest: /tmp/gradle-5.6.3-bin.zip
+    url: https://services.gradle.org/distributions/gradle-6.0.1-bin.zip
+    dest: /tmp/gradle-6.0.1-bin.zip
     mode: '0440'
+    checksum: sha256:d364b7098b9f2e58579a3603dc0a12a1991353ac58ed339316e6762b21efba44
+    timeout: 360
 
 - name: Extract gradle
   unarchive:
-    src: /tmp/gradle-5.6.3-bin.zip
+    src: /tmp/gradle-6.0.1-bin.zip
     remote_src: yes
     dest: /usr/local/
 
 - name: Extract gradle
-  shell: cp -r /usr/local/gradle-5.6.3/bin/* /usr/local/bin
+  shell: cp -r /usr/local/gradle-6.0.1/bin/* /usr/local/bin
 
 - name: Extract gradle libs
-  shell: cp -r /usr/local/gradle-5.6.3/lib/* /usr/local/lib
+  shell: cp -r /usr/local/gradle-6.0.1/lib/* /usr/local/lib
 
 - file:
     path: /etc/localtime
@@ -74,6 +82,35 @@
   file:
     path: /home/{{ ansible_user }}/.terraform.d/plugins
     state: directory
+
+- name: download aws provider
+  get_url:
+    url: https://releases.hashicorp.com/terraform-provider-aws/2.39.0/terraform-provider-aws_2.39.0_linux_amd64.zip
+    dest: /tmp/terraform-provider-aws_2.39.0_linux_amd64.zip
+    mode: '0440'
+
+- name: create plugins directory
+  file:
+    path: "/home/{{ ansible_user }}/.terraform.d/plugins/linux_amd64"
+    state: directory
+
+- name: Extract aws provider
+  unarchive:
+    src: /tmp/terraform-provider-aws_2.39.0_linux_amd64.zip
+    remote_src: yes
+    dest: /home/{{ ansible_user }}/.terraform.d/plugins/linux_amd64
+
+- name: download template provider
+  get_url:
+    url: https://releases.hashicorp.com/terraform-provider-template/2.1.2/terraform-provider-template_2.1.2_linux_amd64.zip
+    dest: /tmp/terraform-provider-template_2.1.2_linux_amd64.zip
+    mode: '0440'
+
+- name: Extract template provider
+  unarchive:
+    src: /tmp/terraform-provider-template_2.1.2_linux_amd64.zip
+    remote_src: yes
+    dest: /home/{{ ansible_user }}/.terraform.d/plugins/linux_amd64
 
 - name: install chef
   shell: "wget -O- https://opscode.com/chef/install.sh | sudo bash"

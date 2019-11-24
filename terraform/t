@@ -43,7 +43,7 @@ function initialize() {
    -backend-config=bucket=vvv-$ENV-state\
    -backend-config=key=$COMPONENT/terraform.tfstate \
    -backend-config=region=eu-west-2 \
-   -get-plugins=true
+   -get-plugins=false
 }
 
 case $TF_COMMAND in

@@ -21,7 +21,8 @@ source ~/.aws/env
 set +a
 export HOME=/home/$(whoami)
 COMMON=$(readlink -f common.tfvars)
-
+echo "Running init"
+./t $ENV $COMPONENT init
 echo "Running validate"
 ./t $ENV $COMPONENT validate -var-file $COMMON
 exit_code=$?

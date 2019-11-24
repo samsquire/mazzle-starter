@@ -23,4 +23,3 @@ source ~/.aws/env
 set +a
 ansible-playbook -i localhost, -c local ${COMPONENT}.playbook.yml --user ubuntu
 echo $? > ${EXIT_CODE_PATH}
-echo "{}" > ${OUTPUT_PATH}

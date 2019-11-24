@@ -2,4 +2,4 @@
   become: yes
   roles:
   - workers
-  - aws
+  - aws-credentials
