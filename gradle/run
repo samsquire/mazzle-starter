@@ -19,8 +19,10 @@ shift
 
 pushd ${COMPONENT}
 
-gradle build run
+gradle build
 exit_code=$?
 
 echo ${exit_code} > ${EXIT_CODE_PATH}
 echo "{}" > ${OUTPUT_PATH}
+
+tar -cf ${ARTIFACT_PATH} build

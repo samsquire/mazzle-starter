@@ -8,6 +8,7 @@ digraph G {
                           "packer/vault-ami*"
                         }
 
+"@ansible-local/nginx*";
 
 "@ansible/worker-provision" -> {
   "gradle/app";

@@ -1,0 +1,8 @@
+plugins {
+    id 'application'
+}
+apply plugin: 'java'
+
+application {
+    mainClassName = 'hello.HelloWorld'
+}

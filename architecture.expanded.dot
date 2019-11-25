@@ -1,6 +1,12 @@
 digraph "G" {
 label="pipeline";
 rankdir=LR;
+"@ansible-local/nginx*/package";
+"@ansible-local/nginx*/validate";
+"@ansible-local/nginx*/plan";
+"@ansible-local/nginx*/run";
+"@ansible-local/nginx*/test";
+"@ansible-local/nginx*/publish";
 "packer/source-ami*/package";
 "packer/source-ami*/validate";
 "packer/source-ami*/plan";
@@ -133,6 +139,11 @@ rankdir=LR;
 "terraform/prometheus/run";
 "terraform/prometheus/test";
 "terraform/prometheus/publish";
+"@ansible-local/nginx*/package" -> "@ansible-local/nginx*/validate"  [key=0];
+"@ansible-local/nginx*/validate" -> "@ansible-local/nginx*/plan"  [key=0];
+"@ansible-local/nginx*/plan" -> "@ansible-local/nginx*/run"  [key=0];
+"@ansible-local/nginx*/run" -> "@ansible-local/nginx*/test"  [key=0];
+"@ansible-local/nginx*/test" -> "@ansible-local/nginx*/publish"  [key=0];
 "packer/source-ami*/package" -> "packer/source-ami*/validate"  [key=0];
 "packer/source-ami*/validate" -> "packer/source-ami*/plan"  [key=0];
 "packer/source-ami*/plan" -> "packer/source-ami*/run"  [key=0];
