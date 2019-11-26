@@ -1,0 +1,5 @@
+
+- local_action:
+    module: copy
+    content: "{}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
