@@ -17,5 +17,6 @@ This project provisions a real life test infrastructure using [devops-pipeline](
 
 # Expanded lifecycle pipeline
 
-
+Look carefully and you'll see the expanded pipeline below:
 ![ExpandedPipeline](architecture.expanded.png)
+It's so large you have to look carefully.
