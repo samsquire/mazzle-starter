@@ -5,9 +5,8 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/srv/app/blue
-ExecStart=java -jar spring-boot-hello-world-0.1.0.jar --server.port=9091
+ExecStart=/usr/bin/java -jar /srv/app/blue/spring-boot-hello-world-0.1.0.jar --server.port=9091
 Restart=on-failure
-
 
 [Install]
 WantedBy=multi-user.target

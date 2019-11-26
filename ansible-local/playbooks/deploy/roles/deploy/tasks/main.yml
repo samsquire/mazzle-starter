@@ -1,3 +1,24 @@
+- name: create test deployment
+  file:
+    path: /srv/app/blue
+    state: directory
+
+- name: install jar
+  copy:
+    remote_src: yes
+    src: ../../../build/libs/spring-boot-hello-world-0.1.0.jar
+    dest: /srv/app/blue
+
+- name: install blue service
+  template:
+    src: service.unit
+    dest: /etc/systemd/system/spring-boot.service
+
+- name: start spring boot service
+  systemd:
+    state: started
+    name: spring-boot
+    enabled: yes
 
 - local_action:
     module: copy
