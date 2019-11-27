@@ -1,6 +1,6 @@
 digraph G {
   label="pipeline";
-  rankdir=LR;
+  rankdir=TB;
 
 
 
@@ -12,8 +12,6 @@ digraph G {
 
 "@ansible/worker-provision" -> {
   "gradle/app";
-  "ansible-local/nginx";
-  "ansible-local/deploy";
   "terraform/buckets";
   "terraform/vault";
   "terraform/dns";

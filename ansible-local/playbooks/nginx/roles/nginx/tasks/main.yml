@@ -1,0 +1,39 @@
+- name: install nginx
+  package:
+    name: nginx
+    state: present
+
+- name: directory
+  file:
+    path: /srv/app
+    state: directory
+
+- name: green directory
+  file:
+    path: /srv/app/green
+    state: directory
+
+- name: blue directory
+  file:
+    path: /srv/app/blue
+    state: directory
+
+- name: configure blue
+  copy:
+    src: nginx.blue.conf
+    dest: /srv/app/blue/nginx.blue.conf
+
+- name: configure green
+  copy:
+    src: nginx.green.conf
+    dest: /srv/app/green/nginx.green.conf
+
+- name: release script
+  copy:
+    src: release.sh
+    dest: /srv/app/release.sh
+
+- local_action:
+    module: copy
+    content: "{}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
