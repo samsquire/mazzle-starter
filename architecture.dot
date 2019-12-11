@@ -9,9 +9,10 @@ digraph G {
                         }
 
 "gradle/app" -> "ansible-local/nginx" -> "ansible-local/deploy";
-
+"@ansible/kubernetes" -> "@ansible/kubernetes-worker";
 "@ansible/worker-provision" -> {
   "gradle/app";
+  "@ansible/kubernetes";
   "terraform/buckets";
   "terraform/vault";
   "terraform/dns";

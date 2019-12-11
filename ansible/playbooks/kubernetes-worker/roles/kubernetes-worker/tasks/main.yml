@@ -1,0 +1,33 @@
+- name: check if kubernetes setup
+  stat:
+    path: /etc/kubernetes/
+  register: etc_kubernetes
+
+- name: join kubernetes cluster
+  shell: "{{ lookup('env', 'secrets.kubeadm_join_command') }}"
+
+
+
+- name: create kube config directory
+  file:
+    state: directory
+    path: "~/.kube"
+  become: false
+
+- name: copy cluster configuration
+  shell: "sudo cp /etc/kubernetes/admin.conf ~/.kube/config"
+  become: false
+- name: correct group of kubernetes cluster config file
+  shell: "sudo chown $(id -u):$(id -g) ~/.kube/config"
+  become: false
+
+- name: create join command
+  shell: "kubeadm token create --print-join-command"
+  register: join_command
+- debug: var=join_command.stdout_lines
+- local_action:
+    module: copy
+    content: "{\"secrets\": {{ join_command.stdout_lines }}
+    }"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
+    become: false

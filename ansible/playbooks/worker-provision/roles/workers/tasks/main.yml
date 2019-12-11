@@ -1,6 +1,41 @@
+
+- name: Add docker key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
+
 - name: update apt
   apt:
     update_cache: yes
+
+- name: install docker
+  package:
+    name: docker.io
+    state: present
+
+- name: setup docker to start
+  systemd:
+    name: docker.service
+    enabled: yes
+    state: started
+
+- name: install apt-transport-https
+  package:
+    name: apt-transport-https
+    state: present
+
+- name: install kubernetes binaries
+  package:
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
 
 - name: install java
   package:
@@ -73,7 +108,10 @@
     state: absent
 
 - name: fix timezone
-  shell: ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+  file:
+    state: link
+    src: /usr/share/zoneinfo/Europe/London
+    dest: /etc/localtime
 
 - name: update time
   shell: "timedatectl set-ntp off ; timedatectl set-ntp on"
@@ -88,6 +126,7 @@
     url: https://releases.hashicorp.com/terraform-provider-aws/2.39.0/terraform-provider-aws_2.39.0_linux_amd64.zip
     dest: /tmp/terraform-provider-aws_2.39.0_linux_amd64.zip
     mode: '0440'
+    checksum: sha256:2450c520b84a8bbeba4347f26f657d9d9950754b9f6d09d7ee919f01f4f54004
 
 - name: create plugins directory
   file:
@@ -105,6 +144,7 @@
     url: https://releases.hashicorp.com/terraform-provider-template/2.1.2/terraform-provider-template_2.1.2_linux_amd64.zip
     dest: /tmp/terraform-provider-template_2.1.2_linux_amd64.zip
     mode: '0440'
+    checksum: sha256:149e4bf47ac21b67f6567767afcd29caaf0b0ca43714748093a00a2a98cd17a8
 
 - name: Extract template provider
   unarchive:
@@ -128,6 +168,7 @@
   package:
     name: python3-pip
     state: present
+
 
 - pip:
     name: ansible

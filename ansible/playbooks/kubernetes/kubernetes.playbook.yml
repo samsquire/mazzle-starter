@@ -1,0 +1,4 @@
+- hosts: workers[0]
+  become: yes
+  roles:
+  - kubernetes-master

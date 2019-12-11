@@ -12,6 +12,11 @@
         to_port: 22
         cidr_ip: "{{ lookup('env', 'me') }}"
         rule_desc: "me to workers"
+      - proto: tcp
+        from_port: 6443
+        to_port: 6443
+        cidr_ip: "10.0.0.0/25"
+        rule_desc: "me to kubernetes"
     rules_egress:
         - proto: tcp
           from_port: 22
@@ -33,6 +38,11 @@
           to_port: 22
           cidr_ip: "0.0.0.0/0"
           rule_desc: "ssh out"
+        - proto: tcp
+          from_port: 6443
+          to_port: 6443
+          cidr_ip: "0.0.0.0/0"
+          rule_desc: "kubernetes out"
     tags:
       Name: box
 
@@ -41,7 +51,7 @@
      key_name: "vvv-sam-n550jv"
      group: box
      vpc_subnet_id: " {{ lookup('env', 'public_subnet_id') }}"
-     instance_type: t2.micro
+     instance_type: t3.micro
      image: "{{ ami_id }}"
      region: "{{ region }}"
      wait: true

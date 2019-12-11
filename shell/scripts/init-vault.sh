@@ -23,5 +23,5 @@ args = ["ssh",
 unseal_cert = run(args, stdout=PIPE)
 unseal_result = unseal_cert.stdout.decode('utf-8')
 sys.stderr.write(unseal_result)
-print(json.dumps({"secrets": unseal_result}))
+print(json.dumps({"secrets": {"unseal_result": unseal_result}}))
 sys.exit(unseal_cert.returncode)

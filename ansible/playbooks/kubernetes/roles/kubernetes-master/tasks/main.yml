@@ -1,0 +1,37 @@
+- name: check if kubernetes setup
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: etc_kubernetes
+
+- name: create kubernetes master
+  shell: kubeadm init --apiserver-advertise-address {{ ansible_default_ipv4.address }}
+  register: kubdadm_init
+  when: not etc_kubernetes.stat.exists
+- debug: var=kubdadm_init.stdout_lines
+
+- name: create kube config directory
+  file:
+    state: directory
+    path: "~/.kube"
+  become: false
+
+- name: copy cluster configuration
+  shell: "sudo cp /etc/kubernetes/admin.conf ~/.kube/config"
+  become: false
+- name: correct group of kubernetes cluster config file
+  shell: "sudo chown $(id -u):$(id -g) ~/.kube/config"
+  become: false
+
+- name: install networking
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+  become: false
+
+- name: create join command
+  shell: "kubeadm token create --print-join-command"
+  register: join_command
+- debug: var=join_command.stdout_lines
+- local_action:
+    module: copy
+    content: "{\"secrets\": {\"kubeadm_join_command\": \"{{ join_command.stdout }}\"}}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
+  become: false
