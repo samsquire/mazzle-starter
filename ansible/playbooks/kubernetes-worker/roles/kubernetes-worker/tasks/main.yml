@@ -1,12 +1,11 @@
 - name: check if kubernetes setup
   stat:
-    path: /etc/kubernetes/
+    path: /etc/kubernetes/kubelet.conf
   register: etc_kubernetes
 
 - name: join kubernetes cluster
   shell: "{{ lookup('env', 'secrets.kubeadm_join_command') }}"
-
-
+  when: not etc_kubernetes.stat.exists
 
 - name: create kube config directory
   file:
@@ -25,6 +24,7 @@
   shell: "kubeadm token create --print-join-command"
   register: join_command
 - debug: var=join_command.stdout_lines
+
 - local_action:
     module: copy
     content: "{\"secrets\": {{ join_command.stdout_lines }}

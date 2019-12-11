@@ -2,3 +2,8 @@
   become: yes
   roles:
   - kubernetes-master
+
+- hosts: workers
+  become: yes
+  roles:
+  - kubernetes-configure

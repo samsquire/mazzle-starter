@@ -1,0 +1,26 @@
+- name: download configuration files
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: /tmp/admin.conf
+    flat: yes
+  when: inventory_hostname == groups["workers"][0]
+
+
+- name: create configuration directory
+  file:
+    state: directory
+    path: ~/.kube
+  when: inventory_hostname != groups["workers"][0]
+  become: false
+
+- name: download configuration files
+  copy:
+    src: /tmp/admin.conf
+    dest: ~/.kube/config
+  when: inventory_hostname != groups["workers"][0]
+  become: false
+
+- name: expose nginx
+  shell: "kubectl expose deployment nginx-deployment --external-ip {{ ansible_default_ipv4.address }} --type LoadBalancer --port 8081 --target-port 80"
+  become: false
+  when: inventory_hostname != groups["workers"][0]

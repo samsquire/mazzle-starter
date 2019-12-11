@@ -15,15 +15,44 @@
     path: "~/.kube"
   become: false
 
-- name: copy cluster configuration
-  shell: "sudo cp /etc/kubernetes/admin.conf ~/.kube/config"
-  become: false
 - name: correct group of kubernetes cluster config file
   shell: "sudo chown $(id -u):$(id -g) ~/.kube/config"
   become: false
 
 - name: install networking
   shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+  become: false
+
+- name: install nginx-ingress
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+  become: false
+
+- name: install nginx
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/website/master/content/en/examples/controllers/nginx-deployment.yaml
+  become: false
+
+- name: copy Ingress
+  template:
+    src: ingress.yml
+    dest: /tmp/ingress.yml
+
+- name: install Ingress
+  shell: kubectl apply -f /tmp/ingress.yml
+  become: false
+
+
+- name: copy service
+  template:
+    src: service.yml
+    dest: /tmp/service.yml
+
+- name: install service
+  shell: kubectl apply -f /tmp/service.yml
+  become: false
+
+- name: get deployed services
+  shell: kubectl get services
+  register: services
   become: false
 
 - name: create join command
