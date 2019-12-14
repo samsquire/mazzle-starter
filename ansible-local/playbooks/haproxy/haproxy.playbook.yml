@@ -1,0 +1,4 @@
+- hosts: haproxy01
+  become: yes
+  roles:
+    - haproxy

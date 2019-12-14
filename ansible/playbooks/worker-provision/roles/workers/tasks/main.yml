@@ -1,3 +1,6 @@
+- name: install gpg
+  package:
+    name: gpg
 
 - name: Add docker key
   apt_key:

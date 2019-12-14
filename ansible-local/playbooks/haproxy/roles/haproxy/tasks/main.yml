@@ -1,0 +1,3 @@
+- name: install haproxy
+  package:
+    name: haproxy
