@@ -9,3 +9,10 @@ projects:
   user: vagrant
   hosts:
     - haproxy01
+
+- name: "ansible-local/playbooks/nginx-php"
+  playbook: "nginx-php.playbook.yml"
+  type: "ansible"
+  user: vagrant
+  hosts:
+    - app01

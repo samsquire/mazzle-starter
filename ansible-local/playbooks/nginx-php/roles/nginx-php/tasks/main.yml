@@ -1,0 +1,56 @@
+- name: update cache
+  apt:
+    update_cache: yes
+
+- name: install nginx
+  package:
+    name: nginx
+
+- name: install php7.2-fpm
+  package:
+    name: php7.2-fpm
+
+- name: php config file
+  template:
+    src: php.ini
+    dest: /etc/php/7.2/fpm/php.ini
+
+- name: nginx configuration file
+  template:
+    src: default
+    dest: /etc/nginx/sites-available/default
+
+- name: start nginx
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: start php7.2-fpm
+  systemd:
+    name: php7.2-fpm
+    enabled: yes
+    state: started
+
+- name: test script
+  template:
+    src: test.php
+    dest: /var/www/html/test.php
+
+- name: install PostgreSQL
+  package:
+    name: "{{ item }}"
+  with_items:
+    -  postgresql
+    -  postgresql-contrib
+
+- name: start postgresql
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: started
