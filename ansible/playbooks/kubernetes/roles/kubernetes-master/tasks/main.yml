@@ -15,6 +15,9 @@
     path: "~/.kube"
   become: false
 
+- name: copy cluster configuration
+  shell: "sudo cp /etc/kubernetes/admin.conf /home/{{ ansible_user }}/.kube/config"
+
 - name: correct group of kubernetes cluster config file
   shell: "sudo chown $(id -u):$(id -g) ~/.kube/config"
   become: false
@@ -61,6 +64,6 @@
 - debug: var=join_command.stdout_lines
 - local_action:
     module: copy
-    content: "{\"secrets\": {\"kubeadm_join_command\": \"{{ join_command.stdout }}\"}}"
+    content: "{\"secrets\": {\"kubeadm_join_command\": {{ join_command.stdout | to_json }}}}"
     dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
   become: false

@@ -109,6 +109,15 @@ resource "aws_security_group_rule" "bastion_from_me_ssh" {
   type              = "ingress"
 }
 
+resource "aws_security_group_rule" "to_kubernetes_master" {
+  protocol          = "tcp"
+  security_group_id = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  cidr_blocks       = ["10.0.0.0/25"]
+  from_port         = 6443
+  to_port           = 6443
+  type              = "egress"
+}
+
 resource "aws_security_group_rule" "bastion_from_me_work_ssh" {
   protocol          = "tcp"
   security_group_id = aws_security_group.bastion.id

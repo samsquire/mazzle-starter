@@ -76,3 +76,7 @@ resource "aws_route53_record" "nodes" {
 output "services_fqdn" {
   value = aws_route53_record.nodes.fqdn
 }
+
+output "cluster" {
+  value = "${data.terraform_remote_state.bastion.outputs.bastion_private_dns} ${data.terraform_remote_state.vault.outputs.vault_private_dns} ${data.terraform_remote_state.prometheus.outputs.prometheus_private_dns}"
+}

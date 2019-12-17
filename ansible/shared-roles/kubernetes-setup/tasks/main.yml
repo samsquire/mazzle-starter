@@ -1,0 +1,62 @@
+- name: install gpg
+  package:
+    name: gpg
+
+- name: Add docker key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
+
+# https://germaniumhq.com/2019/02/14/2019-02-14-Disabling-Swap-for-Kubernetes-in-an-Ansible-Playbook/
+- name: disable swap
+  shell: swapoff -a
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- name: Ensure swap disabled
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: "vm.swappiness = 0"
+
+- name: update apt
+  apt:
+    update_cache: yes
+
+- name: install docker
+  package:
+    name: docker.io
+    state: present
+
+- name: setup docker to start
+  systemd:
+    name: docker.service
+    enabled: yes
+    state: started
+
+- name: install apt-transport-https
+  package:
+    name: apt-transport-https
+    state: present
+
+- name: install kubernetes binaries
+  package:
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+
+- local_action:
+    module: copy
+    content: "{}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"

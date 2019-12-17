@@ -24,3 +24,4 @@
   shell: "kubectl expose deployment nginx-deployment --external-ip {{ ansible_default_ipv4.address }} --type LoadBalancer --port 8081 --target-port 80"
   become: false
   when: inventory_hostname != groups["workers"][0]
+  ignore_errors: yes

@@ -1,8 +1,4 @@
-- hosts: workers[1]
+- hosts: workers[1:]
   become: yes
   roles:
   - kubernetes-worker
-- hosts: workers
-  become: yes
-  roles:
-  - kubernetes-configure

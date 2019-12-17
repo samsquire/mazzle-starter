@@ -11,6 +11,10 @@ output "me" {
   value = var.me
 }
 
+output "domain" {
+  value = var.domain
+}
+
 output "key_name" {
   value = var.key_name
 }

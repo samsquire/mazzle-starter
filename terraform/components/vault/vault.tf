@@ -140,3 +140,7 @@ resource "aws_instance" "vault" {
 output "vault_private_ip" {
   value = aws_instance.vault.private_ip
 }
+
+output "vault_private_dns" {
+  value = aws_instance.vault.private_dns
+}

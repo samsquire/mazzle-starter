@@ -8,7 +8,12 @@ digraph G {
                           "packer/vault-ami*"
                         }
 
-"gradle/app" -> "ansible-local/nginx" -> "ansible-local/deploy";
+"terraform/bastion" -> "@ansible/kubernetes-join";
+"terraform/services" -> "@ansible/kubernetes-join";
+"@ansible/kubernetes" -> "@ansible/kubernetes-join";
+
+
+"gradle/app" -> "ansible-local/deploy";
 "@ansible/kubernetes" -> "@ansible/kubernetes-worker";
 "@ansible/worker-provision" -> {
   "gradle/app";

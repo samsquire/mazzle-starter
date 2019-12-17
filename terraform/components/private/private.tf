@@ -69,3 +69,7 @@ resource "aws_instance" "private" {
 output "private_instance_ip_address" {
   value = aws_instance.private.private_ip
 }
+
+output "private_instance_private_dns" {
+  value = aws_instance.private.private_dns
+}

@@ -1,44 +1,6 @@
-- name: install gpg
-  package:
-    name: gpg
-
-- name: Add docker key
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
-
-- apt_repository:
-    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
-    state: present
-    filename: kubernetes.list
-
 - name: update apt
   apt:
     update_cache: yes
-
-- name: install docker
-  package:
-    name: docker.io
-    state: present
-
-- name: setup docker to start
-  systemd:
-    name: docker.service
-    enabled: yes
-    state: started
-
-- name: install apt-transport-https
-  package:
-    name: apt-transport-https
-    state: present
-
-- name: install kubernetes binaries
-  package:
-    name: "{{ item }}"
-  with_items:
-    - kubelet
-    - kubeadm
-    - kubectl
 
 - name: install java
   package:
@@ -167,7 +129,7 @@
     name: python3
     state: present
 
-- name: install python3
+- name: install pip
   package:
     name: python3-pip
     state: present

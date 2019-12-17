@@ -1,0 +1,5 @@
+- hosts: cluster
+  become: yes
+  roles:
+  - kubernetes-setup
+  - kubernetes-join

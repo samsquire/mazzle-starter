@@ -70,6 +70,10 @@ output "bastion_private_ip" {
   value = aws_instance.bastion.private_ip
 }
 
+output "bastion_private_dns" {
+  value = aws_instance.bastion.private_dns
+}
+
 resource "aws_eip_association" "public" {
   instance_id   = aws_instance.bastion.id
   allocation_id = data.terraform_remote_state.vpc.outputs.aws_eip_public_id
