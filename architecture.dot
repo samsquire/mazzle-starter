@@ -17,7 +17,7 @@ digraph G {
 "terraform/services" -> "@ansible/kubernetes-join";
 "@ansible/kubernetes" -> "@ansible/kubernetes-join";
 
-"terraform/vpc" -> "terraform/repository-volume" -> "terraform/repository";
+"@ansible/worker-provision" -> "terraform/repository-volume" -> "terraform/repository";
 
 "terraform/repository" -> {
   "terraform/bastion";
