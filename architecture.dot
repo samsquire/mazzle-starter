@@ -93,8 +93,6 @@ digraph G {
 "packer/authenticated-ami*" -> "@shell/init-vault";
 "@shell/root-certificates" -> "@shell/init-vault";
 
-"terraform/vault" -> "@shell/init-vault";
-
  "terraform/dns" -> "terraform/prometheus";
  "packer/source-ami*" -> "terraform/prometheus";
 }
