@@ -16,7 +16,12 @@
         from_port: 6443
         to_port: 6443
         cidr_ip: "10.0.0.0/25"
-        rule_desc: "me to kubernetes"
+        rule_desc: "public to kubernetes"
+      - proto: tcp
+        from_port: 6443
+        to_port: 6443
+        cidr_ip: "10.0.0.128/25"
+        rule_desc: "private to kubernetes"
     rules_egress:
         - proto: tcp
           from_port: 22
