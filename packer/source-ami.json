@@ -1,10 +1,11 @@
 {
   "variables": {
     "component": "",
+    "environment": "",
     "build_number": "",
     "subnet_id": "{{ env `public_subnet_id` }}",
     "vpc_id": "{{ env `vpc_id` }}",
-    "mirror_url": "{{ env `mirror_url` }}"
+    "mirror_url": "mirror.{{ env `ENVIRONMENT` }}.{{ env `domain` }}"
   },
     "builders": [
     {

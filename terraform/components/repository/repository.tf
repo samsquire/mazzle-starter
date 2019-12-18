@@ -1,14 +1,10 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "source" {
   most_recent = true
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    name   = "tag:Component"
+    values = ["source-ami"]
   }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-  owners = ["099720109477"]
+  owners = ["140379362680"]
 }
 
 data "terraform_remote_state" "vpc" {
@@ -69,6 +65,7 @@ data "template_file" "bootstrap" {
 
   vars = {
     device_name = module.volume.device_name
+    mirror_url = "mirror.${var.vvv_env}.${var.domain}"
   }
 }
 
@@ -120,7 +117,7 @@ resource "aws_iam_instance_profile" "repository" {
 
 resource "aws_instance" "repository" {
   iam_instance_profile = aws_iam_instance_profile.repository.name
-  ami                  = data.aws_ami.ubuntu.id
+  ami                  = data.aws_ami.source.id
   subnet_id            = data.terraform_remote_state.vpc.outputs.private_subnet_id
   key_name             = var.key_name
   user_data            = data.template_cloudinit_config.cloudinit.rendered
@@ -138,6 +135,10 @@ resource "aws_instance" "repository" {
   ]
 }
 
+output "repository_private_ip" {
+  value = aws_instance.repository.private_ip
+}
+
 output "mirror_url" {
-  value = "mirror.${var.vvv_env}.devops-pipeline.com"
+  value = "mirror.${var.vvv_env}.${var.domain}"
 }

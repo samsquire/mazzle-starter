@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get install -y awscli jq debmirror apache2
+apt-get install -y awscli jq debmirror apache2 dpkg-dev
 
 hostname repository
 
@@ -30,5 +30,9 @@ ln -s /data/mirror /var/www/ubuntu
 
 service apache2 reload
 
-sed -i 's@deb http://eu-west-2.ec2.archive.ubuntu.com/ubuntu/@deb http://localhost/ubuntu@g' /etc/apt/sources.list 
+mkdir /var/www/ubuntu/amd64
 
+# sed -i 's@deb http://eu-west-2.ec2.archive.ubuntu.com/ubuntu/@deb http://localhost/ubuntu@g' /etc/apt/sources.list
+cat <<EOF >> /etc/apt/sources.list.d/repository.list
+deb [trusted=yes] http://${mirror_url}/ubuntu amd64/
+EOF

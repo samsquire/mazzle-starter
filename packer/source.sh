@@ -1,6 +1,14 @@
 #!/bin/bash
 
 # sudo sed -i 's@deb http://eu-west-2.ec2.archive.ubuntu.com/ubuntu/@deb http://${mirror_url}/ubuntu@g' /etc/apt/sources.list
+
+cat <<EOF | sudo bash
+cat <<EOI >> /etc/apt/sources.list.d/repository.list
+deb [trusted=yes] http://${mirror_url}/ubuntu amd64/
+EOI
+EOF
+
+
 sudo add-apt-repository universe
 sudo add-apt-repository multiverse
 sudo apt-get update

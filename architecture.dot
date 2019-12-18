@@ -8,10 +8,22 @@ digraph G {
                           "packer/vault-ami*"
                         }
 
+"terraform/bastion" -> "@repository-upload/nodejs_12.13.1_amd64"
+"terraform/repository" -> "@repository-upload/nodejs_12.13.1_amd64"
+
+"@repository-upload/nodejs_12.13.1_amd64" -> "@shell/dpkg-scanpackages"
+
 "terraform/bastion" -> "@ansible/kubernetes-join";
 "terraform/services" -> "@ansible/kubernetes-join";
 "@ansible/kubernetes" -> "@ansible/kubernetes-join";
 
+"terraform/vpc" -> "terraform/repository-volume" -> "terraform/repository";
+
+"terraform/repository" -> {
+  "terraform/bastion";
+  "terraform/private";
+  "terraform/prometheus";
+}
 
 "gradle/app" -> "ansible-local/deploy";
 "@ansible/kubernetes" -> "@ansible/kubernetes-worker";
