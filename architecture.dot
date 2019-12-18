@@ -68,7 +68,6 @@ digraph G {
  "terraform/dns" -> "terraform/vault";
 
 "terraform/security" -> "terraform/vault"
-"@ansible/worker-provision" -> "terraform/vault";
 
 "terraform/security" -> "terraform/bastion";
 "terraform/security" -> "terraform/private";
