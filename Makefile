@@ -12,3 +12,7 @@ venv/bin/activate: requirements.txt
 	dot -Tpng -o $@ $<
 
 diagrams: $(pngs)
+.PHONY: copy
+copy:
+	cp architecture.png ../devops-pipeline/docs/architecture.tb.png ; \
+	cp architecture.png ../devops-pipeline/docs/architecture.png
