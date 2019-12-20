@@ -6,10 +6,13 @@ This project provisions a real life test infrastructure using [devops-pipeline](
 
 # Contents
 
+* Debian package repository server
+* 2 CI build machines
 * Prometheus instance for monitoring, monitoring via DNS
 * Node exporter installed on base AMI
 * Hashicorp Vault with Self signed Certificate authority for TLS
 * bastion
+* Kubernetes clustering
 
 # Notes
 
