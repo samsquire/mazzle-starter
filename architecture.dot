@@ -7,7 +7,7 @@ digraph G {
 "packer/source-ami*" -> { "terraform/bastion";
                           "packer/vault-ami*"
                         }
-
+"packer/source-ami*" -> "terraform/repository";
 "terraform/bastion" -> "@repository-upload/nodejs_12.13.1_amd64"
 "terraform/repository" -> "@repository-upload/nodejs_12.13.1_amd64"
 
