@@ -128,12 +128,14 @@ resource "aws_instance" "repository" {
     Volume      = data.terraform_remote_state.repository_volume.outputs.mirror_volume_id
   }
   vpc_security_group_ids = [
+    data.terraform_remote_state.security.outputs.repository_sg_id,
     data.terraform_remote_state.vpc.outputs.infrastructure_sg_id,
     data.terraform_remote_state.vpc.outputs.internet_updates_sg_id,
     data.terraform_remote_state.vpc.outputs.rsync_updates_sg_id,
     data.terraform_remote_state.security.outputs.need_secrets_sg_id,
   ]
 }
+
 
 output "repository_private_ip" {
   value = aws_instance.repository.private_ip

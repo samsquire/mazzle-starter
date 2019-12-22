@@ -5,7 +5,6 @@
 
 - name: install jar
   copy:
-    remote_src: yes
     src: ../../../build/libs/spring-boot-hello-world-0.1.0.jar
     dest: /srv/app/blue
 
@@ -24,3 +23,4 @@
     module: copy
     content: "{}"
     dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
+  become: false

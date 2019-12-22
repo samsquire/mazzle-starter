@@ -161,6 +161,17 @@ resource "aws_security_group" "private" {
   }
 }
 
+
+resource "aws_security_group" "public" {
+  name        = "public"
+  description = "public security group"
+  vpc_id      = aws_vpc.vpc.id
+  tags = {
+    Name        = "public"
+    Environment = var.vvv_env
+  }
+}
+
 resource "aws_security_group" "infrastructure" {
   name        = "infra"
   description = "infrastructure security group"
@@ -276,6 +287,10 @@ output "prometheus_sg_id" {
 
 output "private_sg_id" {
   value = aws_security_group.private.id
+}
+
+output "public_sg_id" {
+  value = aws_security_group.public.id
 }
 
 output "infrastructure_sg_id" {

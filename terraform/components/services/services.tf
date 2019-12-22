@@ -52,6 +52,15 @@ data "terraform_remote_state" "private" {
   }
 }
 
+data "terraform_remote_state" "web" {
+  backend = "s3"
+  config = {
+    bucket = "vvv-${var.vvv_env}-state"
+    key    = "web/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}
+
 /*
 concat(
   formatlist(
@@ -78,5 +87,5 @@ output "services_fqdn" {
 }
 
 output "cluster" {
-  value = "${data.terraform_remote_state.bastion.outputs.bastion_private_dns} ${data.terraform_remote_state.vault.outputs.vault_private_dns} ${data.terraform_remote_state.prometheus.outputs.prometheus_private_dns}"
+  value = "${data.terraform_remote_state.bastion.outputs.bastion_private_dns} ${data.terraform_remote_state.vault.outputs.vault_private_dns} ${data.terraform_remote_state.prometheus.outputs.prometheus_private_dns} ${data.terraform_remote_state.web.outputs.web_private_dns}"
 }

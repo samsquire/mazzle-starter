@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "repository-upload" >&2
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+rsync -Pav -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/${key_name} -o \"ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p -i ~/.ssh/${key_name} ubuntu@${bastion_public}\"" \
+  ${COMPONENT}.deb ubuntu@${repository_private_ip}:
+
+echo $? > ${EXIT_CODE_PATH}
+
+cat <<EOF | ssh -o "ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p -i ~/.ssh/${key_name} ubuntu@${bastion_public}" \
+ -o StrictHostKeyChecking=no -i ~/.ssh/${key_name} ubuntu@${repository_private_ip} bash -x
+sudo cp ${COMPONENT}.deb /var/www/ubuntu/
+cd /var/www/ubuntu
+EOF
+
+echo $? > ${EXIT_CODE_PATH}
+echo {} > ${OUTPUT_PATH}

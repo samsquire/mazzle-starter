@@ -1,4 +1,5 @@
-- hosts: all
+- hosts: web
   become: yes
   roles:
+  - install-java
   - deploy

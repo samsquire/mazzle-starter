@@ -54,7 +54,7 @@ resource "aws_instance" "bastion" {
   ami           = data.aws_ami.source.id
   subnet_id     = data.terraform_remote_state.vpc.outputs.public_subnet_id
   key_name      = var.key_name
-  instance_type = "t2.nano"
+  instance_type = "t3.micro"
   tags = {
     Name        = "bastion"
     Environment = var.vvv_env

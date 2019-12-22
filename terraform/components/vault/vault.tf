@@ -124,7 +124,7 @@ resource "aws_instance" "vault" {
   user_data            = data.template_cloudinit_config.vault.rendered
   subnet_id            = data.terraform_remote_state.vpc.outputs.private_subnet_id
   key_name             = var.key_name
-  instance_type        = "t2.nano"
+  instance_type        = "t2.micro"
   tags = {
     Name        = "vault"
     Environment = var.vvv_env

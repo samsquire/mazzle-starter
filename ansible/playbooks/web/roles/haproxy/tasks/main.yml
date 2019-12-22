@@ -1,0 +1,22 @@
+- name: install haproxy
+  package:
+    name: haproxy
+
+- name: install config file
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+  vars:
+    vvv_env: "{{ lookup('env', 'ENVIRONMENT') }}"
+    domain: "{{ lookup('env', 'domain') }}"
+
+- name: reload haproxy
+  service:
+    name: haproxy
+    state: reloaded
+
+- local_action:
+    module: copy
+    content: "{}"
+    dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
+  become: false

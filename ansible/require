@@ -1,0 +1,22 @@
+#!/bin/bash
+
+ENV=$1
+
+if [ -z $ENV ] ; then
+  echo "need to provide environment name"
+  exit 1
+fi
+shift
+
+COMPONENT=$1
+echo $COMPONENT >&2
+
+if [ -z $COMPONENT ] ; then
+  echo "need to provide component name"
+  exit 1
+fi
+shift
+
+if [[ "${COMPONENT}" == "deploy" ]]; then
+  echo "gradle/app latestSuccessful"
+fi

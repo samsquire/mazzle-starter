@@ -18,6 +18,33 @@ resource "aws_security_group" "vault" {
   }
 }
 
+resource "aws_security_group" "repository" {
+  name = "repository"
+  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+}
+
+output "repository_sg_id" {
+  value = aws_security_group.repository.id
+}
+
+resource "aws_security_group_rule" "from_public" {
+  protocol           = "tcp"
+  from_port          = 80
+  to_port            = 80
+  type               = "ingress"
+  security_group_id  = aws_security_group.repository.id
+  cidr_blocks        = ["10.0.0.0/25"]
+}
+
+resource "aws_security_group_rule" "from_private" {
+  protocol           = "tcp"
+  from_port          = 80
+  to_port            = 80
+  type               = "ingress"
+  security_group_id  = aws_security_group.repository.id
+  cidr_blocks        = ["10.0.0.128/25"]
+}
+
 data "aws_security_group" "ci_worker" {
     name = "box"
     vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
@@ -242,4 +269,23 @@ resource "aws_security_group_rule" "prometheus_to_infrastructure" {
   protocol                 = "tcp"
   from_port                = 9100
   to_port                  = 9100
+}
+
+
+resource "aws_security_group_rule" "infrastructure_to_repository" {
+  source_security_group_id = aws_security_group.repository.id
+  security_group_id        = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 80
+  to_port                  = 80
+}
+
+resource "aws_security_group_rule" "repository_from_infrastructure" {
+  source_security_group_id = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  security_group_id        = aws_security_group.repository.id
+  type                     = "ingress"
+  protocol                 = "tcp"
+  from_port                = 80
+  to_port                  = 80
 }

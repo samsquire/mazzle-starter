@@ -5,18 +5,22 @@ digraph G {
 
 
 "packer/source-ami*" -> { "terraform/bastion";
-                          "packer/vault-ami*"
+                          "packer/vault-ami*";
+                          "terraform/web"
                         }
-"packer/source-ami*" -> "terraform/repository";
+
 "terraform/bastion" -> "@repository-upload/nodejs_12.13.1_amd64"
 "terraform/repository" -> "@repository-upload/nodejs_12.13.1_amd64"
 
 "@repository-upload/nodejs_12.13.1_amd64" -> "@shell/dpkg-scanpackages"
 
+"terraform/web" -> "@ansible/kubernetes-join";
 "terraform/bastion" -> "@ansible/kubernetes-join";
 "terraform/services" -> "@ansible/kubernetes-join";
 "@ansible/kubernetes" -> "@ansible/kubernetes-join";
 
+"terraform/bastion" -> "@ansible/deploy";
+"terraform/bastion" -> "@ansible/web";
 "@ansible/worker-provision" -> "terraform/repository-volume" -> "terraform/repository";
 
 "terraform/repository" -> {
@@ -25,9 +29,10 @@ digraph G {
   "terraform/prometheus";
 }
 
-"gradle/app" -> "ansible-local/deploy";
+"gradle/app" -> "terraform/web" -> "@ansible/web" -> "@ansible/deploy";
 "@ansible/kubernetes" -> "@ansible/kubernetes-worker";
 "@ansible/worker-provision" -> {
+  "terraform/web";
   "gradle/app";
   "@ansible/kubernetes";
   "terraform/buckets";

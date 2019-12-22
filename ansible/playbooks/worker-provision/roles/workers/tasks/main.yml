@@ -1,11 +1,3 @@
-- name: update apt
-  apt:
-    update_cache: yes
-
-- name: install java
-  package:
-    name: openjdk-11-jdk
-    state: present
 
 - name: install snapd
   package:
