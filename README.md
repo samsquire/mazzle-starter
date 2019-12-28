@@ -16,6 +16,7 @@ This project provisions a real life infrastructure using [devops-pipeline](https
 
 # Notes
 
+ * Kubernetes is installed on the cluster of bastion, web, prometheus, vault servers
  * Instances have a volume service which mount volumes using the instance tags -- rather than using Terraform.
 
 # Expanded lifecycle pipeline
