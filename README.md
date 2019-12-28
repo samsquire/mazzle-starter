@@ -4,6 +4,56 @@ This project provisions a real life infrastructure using [devops-pipeline](https
 
 ![Pipeline](architecture.png)
 
+# Documentation
+
+This is documentation by component:
+
+## ansible/devbox
+
+Provisions master machine with same tools as the cloud boxes.
+
+## terraform/services
+
+Ties together all the DNS records for prometheus and produces a cluster output which is a list of all the machines
+
+## gradle/app
+
+Builds a spring boot hello world application
+
+## ansible/deploy
+
+Deploys a spring boot application as a service. Depends on the artifact produced by gradle/app
+
+## ansible/kubernetes-join
+
+Causes the cluster to join the kubernetes master on the first worker
+
+## terraform/bastion
+
+Provisions a bastion server
+
+## ansible/kubernetes
+
+Installs a kubernetes master with kubeadm
+
+## ansible/consul
+
+Provisions a consul server
+
+## ansible/consul-cluster
+
+Provisions consul on all the other boxes.
+
+## shell/init-vault
+
+Logs into bastion and initializes the vault. Capturing the secrets as a secrets output which are then encrypted by your GPG key.
+
+## ansible/machines
+
+Spins up two CI machines
+
+## repository-upload/node
+
 # Contents
 
 * Debian package repository server
