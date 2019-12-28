@@ -3,4 +3,5 @@
   roles:
     - consul-cluster
   vars_files:
+    - "group_vars/main.yml"
     - "group_vars/{{ lookup('env', 'ENVIRONMENT') }}.yml"

@@ -3,7 +3,8 @@
   "data_dir": "/opt/consul",
   "log_level": "INFO",
   "node_name": "{{ ansible_hostname }}",
-  "server": true,
+  "server": false,
+  "retry_join": ["{{ consul_master }}"],
   "watches": [
 
   ],

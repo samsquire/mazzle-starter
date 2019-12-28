@@ -37,6 +37,9 @@ digraph G {
 "@ansible/worker-keys" -> "ansible/consul-cluster";
 "terraform/services" -> "ansible/consul-cluster";
 
+"terraform/bastion" -> "ansible/consul";
+"@ansible/worker-keys" -> "ansible/consul";
+
 "gradle/app" -> "terraform/web" -> "@ansible/web" -> "@ansible/deploy";
 "@ansible/kubernetes" -> "@ansible/kubernetes-worker";
 "@ansible/worker-provision" -> {
