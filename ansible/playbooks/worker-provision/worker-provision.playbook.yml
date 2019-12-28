@@ -2,5 +2,6 @@
   become: yes
   roles:
   - kubernetes-setup
+  - install-java
   - workers
   - aws-credentials

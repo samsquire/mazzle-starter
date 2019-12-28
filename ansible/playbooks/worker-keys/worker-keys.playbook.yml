@@ -1,0 +1,4 @@
+- hosts: cluster
+  become: yes
+  roles:
+  - worker-keys

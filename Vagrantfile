@@ -75,6 +75,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "haproxy01" do |node|
     node.vm.hostname = "haproxy01"
   end
+  config.vm.define "web" do |node|
+    node.vm.hostname = "web"
+  end
+  config.vm.define "repository" do |node|
+    node.vm.hostname = "repository"
+  end
   config.ssh.insert_key = false
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true

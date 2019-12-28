@@ -1,0 +1,6 @@
+- hosts: all:!repository
+  become: yes
+  roles:
+    - consul-cluster
+  vars_files:
+    - "group_vars/{{ lookup('env', 'ENVIRONMENT') }}.yml"

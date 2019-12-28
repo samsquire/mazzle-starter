@@ -1,0 +1,12 @@
+[Unit]
+Description=consul
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/consul
+ExecStart=/usr/local/bin/consul agent -bind '{{ '{{' }} GetInterfaceIP "eth0" {{ '}}' }}' -config-file /etc/consul/consul.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

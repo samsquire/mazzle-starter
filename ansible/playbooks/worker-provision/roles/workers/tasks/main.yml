@@ -126,11 +126,33 @@
     name: python3-pip
     state: present
 
-
 - pip:
     name: ansible
 
+- name: generate ssh directory
+  file:
+    state: directory
+    path: ~/.ssh/
+
+- name: generate worker ssh keypair
+  openssh_keypair:
+    path: /home/ubuntu/.ssh/id_ssh_rsa
+  become: false
+
+- name: download ssh public keys
+  fetch:
+    src: /home/ubuntu/.ssh/id_ssh_rsa.pub
+    dest: /tmp/worker-ssh-keys/
+
+- shell: cat /tmp/worker-ssh-keys/**/**/**/.ssh/id_ssh_rsa.pub
+  args:
+    executable: /bin/bash
+  register: ssh_public_keys
+  delegate_to: localhost
+
+
 - local_action:
     module: copy
-    content: "{}"
+    content: "{\"worker_ssh_keys\": \"{{ ssh_public_keys.stdout | replace(\"\n\", \"\\n\") }}\"}"
     dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
+  run_once: true

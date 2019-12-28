@@ -1,0 +1,13 @@
+{
+  "datacenter": "dc1",
+  "data_dir": "/opt/consul",
+  "log_level": "INFO",
+  "node_name": "repository",
+  "server": true,
+  "watches": [
+
+  ],
+  "telemetry": {
+     "statsite_address": "127.0.0.1:2180"
+  }
+}

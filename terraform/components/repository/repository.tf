@@ -141,6 +141,10 @@ output "repository_private_ip" {
   value = aws_instance.repository.private_ip
 }
 
+output "repository_private_dns" {
+  value = aws_instance.repository.private_dns
+}
+
 output "mirror_url" {
   value = "mirror.${var.vvv_env}.${var.domain}"
 }

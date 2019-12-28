@@ -25,5 +25,13 @@ pushd /tmp
 curl -s https://releases.hashicorp.com/vault/0.8.1/vault_0.8.1_linux_amd64.zip -O
 
 unzip vault_0.8.1_linux_amd64.zip
-
 sudo mv vault /usr/local/bin
+
+
+curl https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip
+unzip consul_1.6.2_linux_amd64.zip
+sudo mv consul /usr/local/bin
+
+curl https://releases.hashicorp.com/nomad/0.10.2/nomad_0.10.2_linux_amd64.zip
+unzip nomad_0.10.2_linux_amd64.zip
+sudo mv nomad /usr/local/bin

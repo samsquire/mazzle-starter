@@ -19,6 +19,10 @@ digraph G {
 "terraform/services" -> "@ansible/kubernetes-join";
 "@ansible/kubernetes" -> "@ansible/kubernetes-join";
 
+
+
+"terraform/services" -> "@ansible/worker-keys"
+
 "terraform/bastion" -> "@ansible/deploy";
 "terraform/bastion" -> "@ansible/web";
 "@ansible/worker-provision" -> "terraform/repository-volume" -> "terraform/repository";
@@ -29,9 +33,15 @@ digraph G {
   "terraform/prometheus";
 }
 
+"terraform/bastion" -> "ansible/consul-cluster";
+"@ansible/worker-keys" -> "ansible/consul-cluster";
+"terraform/services" -> "ansible/consul-cluster";
+
 "gradle/app" -> "terraform/web" -> "@ansible/web" -> "@ansible/deploy";
 "@ansible/kubernetes" -> "@ansible/kubernetes-worker";
 "@ansible/worker-provision" -> {
+
+  "@ansible/worker-keys";
   "terraform/web";
   "gradle/app";
   "@ansible/kubernetes";

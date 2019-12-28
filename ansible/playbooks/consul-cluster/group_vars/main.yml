@@ -1,0 +1,1 @@
+consul_master: "repository.{{ lookup('env', 'ENVIRONMENT') }}.{{ lookup('env', 'domain')}}"

@@ -1,0 +1,7 @@
+- name: copy authorized keys
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ lookup('env', 'worker_ssh_keys').split('\\n') }}"
+  become: false

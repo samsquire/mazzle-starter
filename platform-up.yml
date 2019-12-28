@@ -1,10 +1,11 @@
 hosts:
-- app01
+- web
 - haproxy01
+- repository
 
 projects:
-- name: "ansible-local/playbooks/haproxy"
-  playbook: "haproxy.playbook.yml"
+- name: "ansible/playbooks/web"
+  playbook: "web.playbook.yml"
   type: "ansible"
   user: vagrant
   hosts:
@@ -16,3 +17,18 @@ projects:
   user: vagrant
   hosts:
     - app01
+
+
+- name: "ansible/playbooks/consul"
+  playbook: "consul.playbook.yml"
+  type: "ansible"
+  user: vagrant
+  hosts:
+    - repository
+
+- name: "ansible/playbooks/consul-cluster"
+  playbook: "consul-cluster.playbook.yml"
+  type: "ansible"
+  user: vagrant
+  environment:
+    ENVIRONMENT: local

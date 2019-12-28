@@ -1,0 +1,4 @@
+- hosts: repository
+  become: yes
+  roles:
+    - consul-master

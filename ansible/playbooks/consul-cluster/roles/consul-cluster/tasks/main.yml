@@ -1,0 +1,45 @@
+
+- name: install unzip
+  package:
+    name: unzip
+
+- get_url:
+    url: https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip
+    dest: /tmp/
+    checksum: sha256:78d127e5b8edd310c3f9f89487fb833a5c7bcb4e09cb731a4d39100fc53b38be
+
+- unarchive:
+    src: /tmp/consul_1.6.2_linux_amd64.zip
+    dest: /tmp
+    remote_src: yes
+
+- shell: sudo mv /tmp/consul /usr/local/bin
+
+- name: create consul configuration dir
+  file:
+    state: directory
+    path: /etc/consul
+
+- name: create consul data dir
+  file:
+    state: directory
+    path: /opt/consul
+
+- name: install consul configuration file
+  template:
+    src: config.json
+    dest: /etc/consul/consul.json
+  notify:
+    - restart consul
+
+- name: install consul service
+  template:
+    src: service.unit
+    dest: /etc/systemd/system/consul.service
+  notify:
+    - restart consul
+
+- service:
+    name: consul
+    enabled: yes
+    state: started
