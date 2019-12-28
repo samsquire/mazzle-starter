@@ -8,6 +8,14 @@ This project provisions a real life infrastructure using [devops-pipeline](https
 
 This is documentation by component:
 
+## ansible/worker-provision
+
+Provisions worker machines with tools. Generates SSH keys for workers.
+
+## ansible/worker-keys
+
+Provisions all other servers with worker keys, so ansible can be run from the workers.
+
 ## ansible/devbox
 
 Provisions master machine with same tools as the cloud boxes.
