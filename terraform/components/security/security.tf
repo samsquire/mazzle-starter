@@ -127,6 +127,24 @@ resource "aws_security_group_rule" "infrastructure_from_bastion_ssh" {
   to_port                  = 22
 }
 
+resource "aws_security_group_rule" "from_infrastructure_consul_traffic" {
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  source_security_group_id = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  type                     = "ingress"
+  from_port                = 8301
+  to_port                  = 8301
+}
+
+resource "aws_security_group_rule" "to_infrastructure_consul_traffic" {
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  source_security_group_id = data.terraform_remote_state.vpc.outputs.infrastructure_sg_id
+  type                     = "egress"
+  from_port                = 8301
+  to_port                  = 8301
+}
+
 resource "aws_security_group_rule" "bastion_from_me_ssh" {
   protocol          = "tcp"
   security_group_id = aws_security_group.bastion.id

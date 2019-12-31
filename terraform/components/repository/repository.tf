@@ -45,7 +45,7 @@ data "terraform_remote_state" "dns" {
 
 resource "aws_route53_record" "repository" {
   zone_id = data.terraform_remote_state.dns.outputs.subenvironment_zone_id
-  name    = "mirror"
+  name    = "repository"
   type    = "A"
   ttl     = "30"
   records = [
@@ -139,10 +139,6 @@ resource "aws_instance" "repository" {
 
 output "repository_private_ip" {
   value = aws_instance.repository.private_ip
-}
-
-output "repository_private_dns" {
-  value = aws_instance.repository.private_dns
 }
 
 output "mirror_url" {

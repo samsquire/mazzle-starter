@@ -12,7 +12,7 @@ args = parser.parse_args()
 if args.list:
     data = {
         "repository": {
-            "hosts": os.environ["repository_private_dns"].split(" "),
+            "hosts": os.environ["repository_private_ip"].split(" "),
             "children": [],
             "vars": {}
         }
@@ -22,7 +22,6 @@ if args.list:
 
 if args.host:
     data = {
-        "ansible_ssh_private_key_file": "/home/ubuntu/.ssh/id_ssh_rsa",
-        "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o \"ProxyCommand ssh -W %h:%p -i /home/ubuntu/.ssh/id_ssh_rsa ubuntu@{} -o StrictHostKeyChecking=no\"".format(os.environ["bastion_public"])
+        "ansible_ssh_private_key_file": "/home/ubuntu/.ssh/{}".format("id_ssh_rsa")
     }
     print(json.dumps(data, indent=True, sort_keys=True))
