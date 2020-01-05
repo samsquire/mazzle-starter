@@ -1,5 +1,5 @@
 decrypt:
-	for file in $$(find group_vars/ -name 'ansible_vault.yml' ) ; do \
+	for file in $$(find . -name 'ansible_vault.yml' ) ; do \
 		environment=$$(basename $$(dirname $${file})) ; \
 		unencrypted_name=$$(dirname $${file})/ansible_vault.unencrypted.yml ; \
 		mv $${file} $${unencrypted_name} && \
@@ -7,7 +7,7 @@ decrypt:
 	done
 
 encrypt:
-	for file in $$(find group_vars/ -name 'ansible_vault.unencrypted.yml' ) ; do \
+	for file in $$(find . -name 'ansible_vault.unencrypted.yml' ) ; do \
 		environment=$$(basename $$(dirname $${file})) ; \
 		unencrypted_name=$$(dirname $${file})/ansible_vault.unencrypted.yml ; \
 		encrypted_name=$$(dirname $${file})/ansible_vault.yml ; \

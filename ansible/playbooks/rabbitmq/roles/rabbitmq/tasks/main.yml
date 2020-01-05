@@ -1,0 +1,74 @@
+- name: install gnupg2
+  apt:
+    name: gnupg2
+    state: present
+
+- name: install curl
+  apt:
+    name: curl
+    state: present
+
+- name: install apt key
+  shell: curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | sudo apt-key add -
+
+- name: install erlang repository
+  copy:
+    dest: /etc/apt/sources.list.d/bintray.erlang.list
+    content: "deb http://dl.bintray.com/rabbitmq-erlang/debian bionic erlang-21.x"
+
+- name: apt update
+  apt:
+    update_cache: yes
+
+- name: install erlang
+  shell: |
+    sudo apt-get install -y erlang-base \
+    erlang-asn1 erlang-crypto erlang-eldap erlang-ftp erlang-inets \
+    erlang-mnesia erlang-os-mon erlang-parsetools erlang-public-key \
+    erlang-runtime-tools erlang-snmp erlang-ssl \
+    erlang-syntax-tools erlang-tftp erlang-tools erlang-xmerl
+
+- name: install rabbitmq-server repository
+  copy:
+    dest: /etc/apt/sources.list.d/bintray.rabbitmq.list
+    content: "deb https://dl.bintray.com/rabbitmq/debian bionic main"
+
+- name: install rabbitmq-server
+  shell: sudo apt-get install rabbitmq-server -y --fix-missing
+
+- name: rabbit cluster configuration file
+  template:
+    src: rabbitmq.conf
+    dest: /etc/rabbitmq/rabbitmq.conf
+  notify:
+    - restart rabbitmq
+
+- name: rabbit classic cluster configuration file
+  file:
+    path: /etc/rabbitmq/rabbitmq.config
+    state: absent
+
+
+- name: enable manaagement
+  shell: rabbitmq-plugins enable rabbitmq_management
+
+- name: create admin user
+  shell: sudo rabbitmqctl add_user sam {{ admin_password }}
+  ignore_errors: yes
+
+- name: add management rights
+  shell: sudo rabbitmqctl set_user_tags sam administrator manager
+
+- name: set permissions
+  shell: sudo rabbitmqctl set_permissions -p / sam ".*" ".*" ".*"
+
+- name: erlang cookie
+  copy:
+    dest: "/var/lib/rabbitmq/.erlang.cookie"
+    content: "{{ erlang_cookie }}"
+
+
+- name: restart RabbitMQ
+  service:
+    name: rabbitmq-server
+    state: restarted

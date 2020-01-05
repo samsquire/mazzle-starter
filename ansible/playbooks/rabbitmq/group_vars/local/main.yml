@@ -1,0 +1,1 @@
+rabbit_nodes: ['repository', 'web', 'haproxy01']

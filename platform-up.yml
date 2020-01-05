@@ -25,9 +25,20 @@ projects:
   user: vagrant
   hosts:
     - repository
+  environment:
+    OUTPUT_PATH: "/tmp/blah"  
 
 - name: "ansible/playbooks/consul-cluster"
   playbook: "consul-cluster.playbook.yml"
+  type: "ansible"
+  user: vagrant
+  environment:
+    ENVIRONMENT: local
+    OUTPUT_PATH: "/tmp/blah"
+
+
+- name: "ansible/playbooks/rabbitmq"
+  playbook: "rabbitmq.playbook.yml"
   type: "ansible"
   user: vagrant
   environment:

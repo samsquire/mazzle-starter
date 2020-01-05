@@ -1,0 +1,7 @@
+- hosts: all
+  become: true
+  roles:
+  - rabbitmq
+  vars_files:
+  - "group_vars/{{ lookup('env', 'ENVIRONMENT') }}/ansible_vault.yml"
+  - "group_vars/{{ lookup('env', 'ENVIRONMENT') }}/main.yml"
