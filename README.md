@@ -2,7 +2,7 @@
 
 This project provisions a real life infrastructure using [devops-pipeline](https://github.com/samsquire/devops-pipeline). This project uses [platform-up](https://github.com/samsquire/platform-up) to test ansible playbooks.
 
-This diagram' source is executable.
+This diagram's source is executable.
 
 ![Pipeline](architecture.png)
 
