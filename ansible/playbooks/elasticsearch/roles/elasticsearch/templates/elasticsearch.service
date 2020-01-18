@@ -1,0 +1,13 @@
+[Unit]
+Description=elasticsearch
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/elasticsearch
+ExecStart=/opt/elasticsearch/bin/elasticsearch
+Restart=on-failure
+User=elasticsearch
+
+[Install]
+WantedBy=multi-user.target

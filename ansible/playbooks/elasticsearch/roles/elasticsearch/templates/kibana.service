@@ -1,0 +1,13 @@
+[Unit]
+Description=kibana
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/kibana
+ExecStart=/opt/kibana/bin/kibana
+Restart=on-failure
+User=kibana
+
+[Install]
+WantedBy=multi-user.target

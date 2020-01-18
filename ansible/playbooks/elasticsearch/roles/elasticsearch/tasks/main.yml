@@ -1,0 +1,181 @@
+- get_url:
+    url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.1-linux-x86_64.tar.gz
+    dest: /tmp/elasticsearch-7.5.1-linux-x86_64.tar.gz
+    mode: '0444'
+    checksum: sha256:37c317efaacf33a1bae250a59e822864750fddd8caf08c4b6a6c235ffa5f47e8
+
+- name: elasticsearch group
+  group:
+    name: elasticsearch
+    state: present
+- name: add elasticsearch user
+  user:
+    name: elasticsearch
+    comment: elasticsearch
+    group: elasticsearch
+
+
+- file:
+    path: /opt/elasticsearch
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    recurse: yes
+
+
+- unarchive:
+    src: /tmp/elasticsearch-7.5.1-linux-x86_64.tar.gz
+    remote_src: yes
+    dest: /tmp
+
+- name: move in place
+  shell: mv /tmp/elasticsearch-7.5.1/* /opt/elasticsearch
+  ignore_errors: yes
+
+- name: elasticsearch config file
+  template:
+    src: elasticsearch.yml
+    dest: /opt/elasticsearch/config/elasticsearch.yml
+    owner: elasticsearch
+  notify:
+    - restart elasticsearch
+
+- name: install elasticsearch service
+  template:
+    src: elasticsearch.service
+    dest: /etc/systemd/system/elasticsearch.service
+  notify:
+    - reload daemon
+    - restart elasticsearch
+
+- service:
+    name: elasticsearch
+    enabled: yes
+    state: started
+
+- get_url:
+    url: https://artifacts.elastic.co/downloads/kibana/kibana-7.5.1-linux-x86_64.tar.gz
+    dest: /tmp/kibana-7.5.1-linux-x86_64.tar.gz
+    mode: '0444'
+    checksum: sha256:4acea581edfa8c0b66a1f3fcf618f22a2e113d59ae757b3e0e6fbae8047304f3
+
+- name: kibana group
+  group:
+    name: kibana
+    state: present
+- name: add kibana user
+  user:
+    name: kibana
+    comment: kibana
+    group: kibana
+
+
+
+- unarchive:
+    src: /tmp/kibana-7.5.1-linux-x86_64.tar.gz
+    remote_src: yes
+    dest: /tmp
+
+- name: move in place
+  shell: mv /tmp/kibana-7.5.1-linux-x86_64/* /opt/kibana
+  ignore_errors: yes
+
+- name: install kibana configuration file
+  template:
+    src: kibana.yml
+    dest: /opt/kibana/config/kibana.yml
+  notify:
+  - restart kibana
+
+- file:
+    path: /opt/kibana
+    state: directory
+    owner: kibana
+    group: kibana
+    recurse: yes
+
+- name: install kibana service
+  template:
+    src: kibana.service
+    dest: /etc/systemd/system/kibana.service
+  notify:
+    - reload daemon
+    - restart kibana
+
+- service:
+    name: kibana
+    enabled: yes
+    state: started
+
+- file:
+    path: /opt/logstash
+    state: directory
+    owner: logstash
+    group: logstash
+    recurse: yes
+
+- get_url:
+    url: https://artifacts.elastic.co/downloads/logstash/logstash-7.5.1.tar.gz
+    dest: /opt/logstash/logstash-7.5.1.tar.gz
+    mode: '0444'
+    checksum: sha256:72f9454c82e8ddd509b5e8d41de0b5089c8722041181963e70de60fd38558606
+
+- name: logstash group
+  group:
+    name: logstash
+    state: present
+- name: add logstash user
+  user:
+    name: logstash
+    comment: logstash
+    group: logstash
+
+- unarchive:
+    src: /opt/logstash/logstash-7.5.1.tar.gz
+    remote_src: yes
+    dest: /opt/logstash/
+
+- file:
+    path: /opt/logstash
+    state: directory
+    owner: logstash
+    group: logstash
+    recurse: yes
+
+- name: move in place
+  shell: mv /opt/logstash/logstash-7.5.1/* /opt/logstash
+  ignore_errors: yes
+
+- file:
+    path: /opt/kibana
+    state: directory
+    owner: kibana
+    group: kibana
+    recurse: yes
+- file:
+    path: /opt/logstash
+    state: directory
+    owner: logstash
+    group: logstash
+    recurse: yes
+
+- name: install logstash config file
+  template:
+    src: logstash.conf
+    dest: /opt/logstash/config/logstash.conf
+    owner: logstash
+  notify:
+    - restart logstash
+
+- name: install logstash service
+  template:
+    src: logstash.service
+    dest: /etc/systemd/system/logstash.service
+  notify:
+    - reload daemon
+    - restart logstash
+
+- name: configure rsyslog
+  template:
+    src: to-logstash.conf
+    dest: /etc/rsyslog.d/to-logstash.conf

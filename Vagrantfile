@@ -81,6 +81,10 @@ Vagrant.configure("2") do |config|
   config.vm.define "repository" do |node|
     node.vm.hostname = "repository"
   end
+  config.vm.define "elk" do |node|
+    node.vm.hostname = "elk"
+    node.vm.network "forwarded_port", guest: 5601, host: 5601
+  end
   config.ssh.insert_key = false
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true

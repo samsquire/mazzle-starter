@@ -2,6 +2,7 @@ hosts:
 - web
 - haproxy01
 - repository
+- elk
 
 projects:
 - name: "ansible/playbooks/web"
@@ -26,7 +27,7 @@ projects:
   hosts:
     - repository
   environment:
-    OUTPUT_PATH: "/tmp/blah"  
+    OUTPUT_PATH: "/tmp/blah"
 
 - name: "ansible/playbooks/consul-cluster"
   playbook: "consul-cluster.playbook.yml"
@@ -43,3 +44,13 @@ projects:
   user: vagrant
   environment:
     ENVIRONMENT: local
+
+
+- name: "ansible/playbooks/elasticsearch"
+  playbook: "elasticsearch.playbook.yml"
+  type: "ansible"
+  user: vagrant
+  environment:
+    ENVIRONMENT: local
+  hosts:
+    - elk

@@ -1,0 +1,13 @@
+[Unit]
+Description=logstash
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/logstash
+ExecStart=/opt/logstash/bin/logstash -f /opt/logstash/config/logstash.conf
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target

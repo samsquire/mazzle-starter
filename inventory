@@ -2,9 +2,11 @@ app01
 web
 repository
 haproxy01
+elk
 
 [local]
 app01
 web
 repository
 haproxy01
+elk

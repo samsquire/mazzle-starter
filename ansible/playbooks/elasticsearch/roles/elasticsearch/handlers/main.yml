@@ -1,0 +1,21 @@
+- name: reload daemon
+  command: systemctl daemon-reload
+
+- name: restart elasticsearch
+  service:
+    name: elasticsearch
+    enabled: yes
+    state: restarted
+
+- name: restart kibana
+  service:
+    name: kibana
+    enabled: yes
+    state: restarted
+
+
+- name: restart logstash
+  service:
+    name: logstash
+    enabled: yes
+    state: restarted
