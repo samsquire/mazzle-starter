@@ -23,7 +23,7 @@ set +a
 mkdir -p logs
 logfile=logs/$COMPONENT-$BUILD_NUMBER.log
 shasum=$(shasum < $COMPONENT.json)
-packer build --var "component=$COMPONENT" --var "environment=$ENVIRONMENT" --var "build_number=$BUILD_NUMBER" -machine-readable $COMPONENT.json | tee $logfile >&2
+packer build -debug --var "component=$COMPONENT" --var "environment=$ENVIRONMENT" --var "build_number=$BUILD_NUMBER" -machine-readable $COMPONENT.json | tee $logfile >&2
 result=$?
 
 echo ${result} > ${EXIT_CODE_PATH}

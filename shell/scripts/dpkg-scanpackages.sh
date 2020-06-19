@@ -15,7 +15,7 @@ args = ["ssh",
   "-i",
   "~/.ssh/{}".format(key_name),
   "bash", "-c",
-  "cd /var/www/ubuntu/ ; sudo dpkg-scanpackages -m . | gzip -c > ~/Packages.gz ; sudo cp ~/Packages.gz /var/www/ubuntu/"]
+  "cd /var/www/ubuntu/ ; sudo mkdir /var/www/ubuntu/amd64 ; sudo dpkg-scanpackages -m . > ~/Packages ; sudo cp ~/Packages /var/www/ubuntu/amd64/"]
 
 scanpackages = run(args, stdout=PIPE)
 scanpackages_output = scanpackages.stdout.decode('utf-8')

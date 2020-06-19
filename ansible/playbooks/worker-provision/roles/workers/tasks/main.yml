@@ -116,6 +116,25 @@
   apt:
     deb: https://packages.chef.io/files/stable/inspec/4.18.0/ubuntu/18.04/inspec_4.18.0-1_amd64.deb
 
+- name: install build-essential
+  package:
+    name: build-essential
+    state: present
+
+- name: install ruby dev
+  package:
+    name: ruby-dev
+    state: present
+
+- name: install rbnacl
+  shell: sudo /opt/inspec/embedded/bin/gem install rbnacl
+
+- name: install bcrypt_pbkdf
+  shell: sudo /opt/inspec/embedded/bin/gem install bcrypt_pbkdf
+
+- name: install rbnacl-libsodium
+  shell: sudo /opt/inspec/embedded/bin/gem install rbnacl-libsodium
+
 - name: install python3
   package:
     name: python3
@@ -126,18 +145,27 @@
     name: python3-pip
     state: present
 
-- pip:
-    name: ansible
+- name: install ansible
+  shell: pip3 install ansible
+
+- name: install ansible
+  shell: pip3 install boto
+
+- name: ensure ubuntu user exists
+  shell: useradd -m ubuntu
+  ignore_errors: yes
 
 - name: generate ssh directory
   file:
     state: directory
-    path: ~/.ssh/
+    path: /home/ubuntu/.ssh/
 
 - name: generate worker ssh keypair
-  openssh_keypair:
-    path: /home/ubuntu/.ssh/id_ssh_rsa
-  become: false
+  shell: ssh-keygen -b 4096 -t rsa -f /home/ubuntu/.ssh/id_ssh_rsa -q -N ""
+  ignore_errors: yes
+
+- name: change permissions
+  shell: chown ubuntu:ubuntu /home/ubuntu/.ssh/id_ssh_rsa
 
 - name: download ssh public keys
   fetch:
@@ -156,3 +184,4 @@
     content: "{\"worker_ssh_keys\": \"{{ ssh_public_keys.stdout | replace(\"\n\", \"\\n\") }}\"}"
     dest: "{{ lookup('env', 'OUTPUT_PATH') }}"
   run_once: true
+  become: no

@@ -53,6 +53,16 @@ resource "aws_route53_record" "repository" {
   ]
 }
 
+resource "aws_route53_record" "mirror" {
+  zone_id = data.terraform_remote_state.dns.outputs.subenvironment_zone_id
+  name    = "mirror"
+  type    = "A"
+  ttl     = "30"
+  records = [
+    aws_instance.repository.private_ip,
+  ]
+}
+
 module "volume" {
   source      = "../../module-templates/volume-mounting"
   role        = aws_iam_role.repository.name
@@ -139,6 +149,10 @@ resource "aws_instance" "repository" {
 
 output "repository_private_ip" {
   value = aws_instance.repository.private_ip
+}
+
+output "repository_private_dns" {
+  value = aws_instance.repository.private_dns
 }
 
 output "mirror_url" {

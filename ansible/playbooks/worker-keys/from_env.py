@@ -22,7 +22,8 @@ if args.list:
 
 if args.host:
     data = {
-        "ansible_ssh_private_key_file": "/home/sam/.ssh/{}".format(os.environ["key_name"]),
-        "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o \"ProxyCommand ssh -W %h:%p -i /home/sam/.ssh/{} ubuntu@{} -o StrictHostKeyChecking=no\"".format(os.environ["key_name"], os.environ["bastion_public"]) 
+        "ansible_ssh_private_key_file": "{}/{}".format(os.environ["key_path"], os.environ["key_name"]),
+        "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o \"ProxyCommand ssh -W %h:%p -i {}/{} ubuntu@{} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null\"".format(
+        os.environ["key_path"], os.environ["key_name"], os.environ["bastion_public"])
     }
     print(json.dumps(data, indent=True, sort_keys=True))

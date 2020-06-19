@@ -8,6 +8,7 @@ build:
 
 package:
 	mkdir /tmp/installdir ; \
+	cd node-v12.13.1; \
 	make install DESTDIR=/tmp/installdir ; \
 	fpm -s dir -t deb -n nodejs -v 12.13.1 -C /tmp/installdir \
   -p nodejs_VERSION_ARCH.deb \

@@ -22,16 +22,7 @@
         "Component": "{{ user `component` }}",
         "Name": "{{ user `component` }}_{{ user `build_number`}}"
       },
-      "source_ami_filter": {
-        "most_recent": true,
-        "filters": {
-          "virtualization-type": "hvm",
-          "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
-          "root-device-type": "ebs"
-        },
-        "owners": ["099720109477"]
-
-      }
+      "source_ami": "ami-0eb89db7593b5d434"
     }
     ],
   "provisioners": [

@@ -71,6 +71,7 @@
     seconds: 15
 
 - ec2_instance_info:
+    region: eu-west-2
     filters:
       "tag:Name": worker
       "instance-state-name": running
