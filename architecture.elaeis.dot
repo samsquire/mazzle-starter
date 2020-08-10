@@ -1,0 +1,7 @@
+digraph G {
+  label="pipeline";
+  rankdir=TB;
+
+"ansible-local/dev" -> "ansible-inventory/tools"
+
+}
