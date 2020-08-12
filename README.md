@@ -73,6 +73,7 @@ Spins up two CI machines
 * Hashicorp Vault with Self signed Certificate authority for TLS
 * bastion
 * Kubernetes clustering
+* Consul clustering
 
 
 # Notes
