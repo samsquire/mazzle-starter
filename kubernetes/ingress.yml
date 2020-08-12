@@ -12,4 +12,4 @@ spec:
         pathType: Prefix
         backend:
           serviceName: nginx-service
-          servicePort: 1337
+          servicePort: 80
