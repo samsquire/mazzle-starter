@@ -1,6 +1,6 @@
-# devops-pipeline-starter
+# mazzle-starter
 
-This project provisions a real life infrastructure using [devops-pipeline](https://github.com/samsquire/devops-pipeline). This project uses [platform-up](https://github.com/samsquire/platform-up) to test ansible playbooks.
+This project provisions a real life infrastructure using [mazzle](https://github.com/samsquire/mazzle). This project uses [platform-up](https://github.com/samsquire/platform-up) to test ansible playbooks.
 
 This diagram's source is executable.
 
