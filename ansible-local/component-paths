@@ -17,3 +17,4 @@ fi
 shift
 
 echo playbooks/${COMPONENT}
+echo tests/${COMPONENT}

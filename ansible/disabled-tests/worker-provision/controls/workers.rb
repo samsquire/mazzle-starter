@@ -1,4 +1,4 @@
-describe command('terraform') do
+describe command('kubectl') do
   it { should exist }
 end
 describe command('packer') do
