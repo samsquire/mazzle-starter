@@ -4,11 +4,63 @@
     name: "*"
     state: latest
 
+- name: install nginx
+  package:
+    name: nginx
+
+- name: install php7.4-mysql
+  package:
+      name: php7.4-mysql
+
+- name: install php7.4-fpm
+  package:
+    name: php7.4-fpm
+
+- name: php config file
+  template:
+    src: php.ini
+    dest: /etc/php/7.4/fpm/php.ini
+
+- name: nginx configuration file
+  template:
+    src: default
+    dest: /etc/nginx/sites-available/default
+
+- name: start nginx
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: start php7.4-fpm
+  systemd:
+    name: php7.4-fpm
+    enabled: yes
+    state: started
+
+- name: install MySQL
+  package:
+      name: mysql-server
+
+- name: test script
+  template:
+    src: test.php
+    dest: /var/www/html/test.php
+
+
 - name: install packages
   package: "{{ item }}"
   with_items:
   - nginx
   - dnsutils
+  - fail2ban
+  - vim
+  - php-xmlrpc
 
 - name: install gpg
   package:
@@ -108,6 +160,37 @@
   package:
     name: postgresql
     state: present
+
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Add the user 'sam'
+  user:
+    name: sam
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: sam
+    state: present
+    key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgRS1o5gd1uTo6QMHV+PqKtk7pLgE1hCxtHwZzMQrNlMlff6XnXu0z+tOSOvn5VA0Qmk9flU3hGzKC6acFe9uxTVp9DIFkvLmTS6OvOAdPrbMxvZsbfD57APllHT0gWt+GheydX3B6XpBmxkRsiZP1WyAYU1msDqfGh79El+r8qLvy2wom7A9494DsjoJPu3BqFgPG/cAvITVb+iEIG5YQrAILVydDXoFCuOmMSZ7h4z0nPHklLUfdyHg4D+6Q+cMjyt5L2Rr+YIX6coUT/QCjYqm+K6gJmWxOYsF2KW5aiTJnrDGKJ4mIChvv0BUkQYNwFaoQrFcVPmFuHpkjY2JO+CasrEuAKQzDu+YEIj1e3ZjEWriyenGYTxHkDhsOoH0KnoDzl4uMAplwr/RaU2MfSZ6zWNlpwkoP/N7QXVjzdgfJkJUbwjHsl+UmKRYH46BOOaerinWatN3n2ASzEBTasvyBcYyf5HbMGFG5N4jO7fqAG80xr3/tOUJgb0lT+1dLABrjcOjkNp/Sgb1psAQ/a6gA3phTRNC8boU7aq8zRbPMKqAGmHvcRtDSDkXnH9d/EipRTUK0Imn5zy3/8U2/r0Y7pXUy9a51YXlGP6A1h7arpcqP8Qc3vzSeHGTnOmiX/ZwEIIwlfojwbABuIwXFlPGbHyRA/e/U+Wuxw8UfHQ==
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add sudoers users to wheel group
+  user:
+    name: sam
+    groups: wheel
+    append: yes
+    state: present
+    createhome: yes
 
 - local_action:
     module: copy
