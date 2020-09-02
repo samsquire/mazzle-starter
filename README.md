@@ -6,6 +6,12 @@ This diagram's source is executable.
 
 ![Pipeline](architecture.png)
 
+```
+mazzle home --file architecture.elaeis.dot --key sam@samsquire.com
+# or
+mazzle home --file architecture.dot --key sam@samsquire.com
+```
+
 # Documentation
 
 This is documentation by component:
