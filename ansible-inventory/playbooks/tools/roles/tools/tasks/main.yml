@@ -192,6 +192,10 @@
     state: present
     createhome: yes
 
+- name: install java
+  package:
+    name: openjdk-14-jdk
+
 - local_action:
     module: copy
     content: "{\"secrets\": {\"kubeadm_join_command\": {{ join_command.stdout | to_json }} } }"

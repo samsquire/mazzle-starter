@@ -2,7 +2,7 @@ server {
 
     root /var/www/html;
     index index.php index.html index.htm index.nginx-debian.html;
-
+    http2_push_preload on;
     server_name elaeis.cloud-angle.com;
 
     location / {
@@ -12,14 +12,23 @@ server {
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        http2_push /wp-content/themes/twentytwenty/style.css?ver=1.5;
+        http2_push /wp-content/themes/twentytwenty/assets/js/index.js?ver=1.5;
+        http2_push /wp-includes/css/dist/block-library/style.min.css?ver=5.5.1;
+    }
+
+    location /blazegraph {
+        auth_basic           "Blazegraph";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        proxy_pass http://localhost:9999/blazegraph;
     }
 
     location ~ /\.ht {
         deny all;
     }
 
-    listen [::]:443 ssl ipv6only=on; # managed by Certbot
-    listen 443 ssl; # managed by Certbot
+    listen [::]:443 ssl ipv6only=on http2; # managed by Certbot
+    listen 443 ssl http2; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/elaeis.cloud-angle.com/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/elaeis.cloud-angle.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
@@ -37,7 +46,4 @@ server {
 
     server_name elaeis.cloud-angle.com;
     return 404; # managed by Certbot
-
-
 }
-~   
